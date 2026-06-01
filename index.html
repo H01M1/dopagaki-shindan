@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOPAGAKI ANALYSIS - ドパガキ防衛局 脳波解析部</title>
+<meta name="description" content="DOPAGAKI防衛局が提供する、無料の脳波侵食率測定サービス。10問の設問にご回答いただくことで、あなたの脳のドーパミン依存度を診断いたします。">
+<meta property="og:title" content="DOPAGAKI ANALYSIS - 脳波解析センター">
+<meta property="og:description" content="あなたの脳は、どれだけ侵食されているか?">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=VT323&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --color-bg-1: #1d2088;
+  --color-bg-2: #0F1144;
+  --color-bg-3: #0A0A0A;
+  --color-cyan: #00FFFF;
+  --color-magenta: #FF00FF;
+  --color-red: #FF3344;
+  --color-yellow: #FFCC00;
+  --color-green: #00FF88;
+  --color-text: #E0E8FF;
+  --color-text-dim: #8090B0;
+  --font-display: 'Orbitron', sans-serif;
+  --font-mono: 'VT323', monospace;
+  --font-jp: 'Noto Sans JP', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+
+body {
+  background: radial-gradient(ellipse at top, var(--color-bg-1), var(--color-bg-2) 50%, var(--color-bg-3));
+  background-attachment: fixed;
+  color: var(--color-text);
+  font-family: var(--font-jp);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 255, 255, 0.03) 2px, rgba(0, 255, 255, 0.03) 4px);
+  pointer-events: none;
+  z-index: 100;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+  z-index: 101;
+}
+
+@keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.95; } }
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 8px currentColor, 0 0 16px currentColor; }
+  50% { text-shadow: 0 0 12px currentColor, 0 0 24px currentColor, 0 0 32px currentColor; }
+}
+@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0.3; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.site-header {
+  border-bottom: 1px solid var(--color-cyan);
+  padding: 1rem 1.5rem;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.site-brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--color-cyan);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 10px var(--color-cyan);
+}
+
+.site-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.05em;
+}
+
+.rec-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  color: var(--color-red);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+}
+
+.rec-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--color-red);
+  animation: blink 1.2s infinite;
+  box-shadow: 0 0 8px var(--color-red);
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.screen { display: none; animation: fadeInUp 0.4s ease-out; }
+.screen.active { display: block; }
+
+.screen-top { text-align: center; padding: 2rem 0; }
+
+.top-bracket-line {
+  font-family: var(--font-mono);
+  color: var(--color-cyan);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  margin: 1rem 0;
+  opacity: 0.8;
+}
+
+.top-main-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  color: var(--color-cyan);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 20px var(--color-cyan), 0 0 40px var(--color-cyan);
+  margin: 1rem 0 0.5rem;
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.top-subtitle {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.15em;
+  margin-bottom: 3rem;
+}
+
+.top-main-catch {
+  font-family: var(--font-jp);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 900;
+  color: var(--color-text);
+  margin: 2rem 0;
+  line-height: 1.6;
+}
+
+.top-main-catch .highlight {
+  color: var(--color-red);
+  text-shadow: 0 0 15px var(--color-red);
+}
+
+.top-sub-catch {
+  font-family: var(--font-jp);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.8;
+  margin: 2rem auto;
+  max-width: 500px;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.4);
+  text-align: left;
+}
+
+.top-sub-catch .info-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px dashed rgba(0, 255, 255, 0.2);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.top-sub-catch .info-line:last-child { border-bottom: none; }
+.top-sub-catch .info-label { color: var(--color-cyan); letter-spacing: 0.1em; }
+.top-sub-catch .info-value { color: var(--color-text); }
+
+.cta-button {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  padding: 1.2rem 2.5rem;
+  background: transparent;
+  color: var(--color-cyan);
+  border: 2px solid var(--color-cyan);
+  cursor: pointer;
+  text-decoration: none;
+  text-shadow: 0 0 10px var(--color-cyan);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  margin: 2rem 0;
+}
+
+.cta-button:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.6), inset 0 0 30px rgba(0, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.cta-button:active { transform: translateY(0); }
+
+.top-footer-notes {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.05em;
+  margin-top: 3rem;
+  line-height: 1.6;
+  border-top: 1px dashed rgba(0, 255, 255, 0.3);
+  padding-top: 1.5rem;
+}
+
+.screen-question { padding: 1rem 0; }
+.question-progress { margin-bottom: 2rem; }
+
+.question-progress-label {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.question-progress-bar {
+  height: 6px;
+  background: rgba(0, 255, 255, 0.15);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.question-progress-fill {
+  height: 100%;
+  background: var(--color-cyan);
+  box-shadow: 0 0 8px var(--color-cyan);
+  transition: width 0.4s ease;
+}
+
+.question-no {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+.question-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-magenta);
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 8px var(--color-magenta);
+}
+
+.question-text {
+  font-family: var(--font-jp);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--color-text);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-left: 3px solid var(--color-cyan);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.question-options { display: flex; flex-direction: column; gap: 0.8rem; }
+
+.option-button {
+  font-family: var(--font-jp);
+  font-size: 1rem;
+  color: var(--color-text);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  line-height: 1.5;
+}
+
+.option-button:hover {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  transform: translateX(4px);
+}
+
+.option-marker {
+  font-family: var(--font-mono);
+  color: var(--color-cyan);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+
+.screen-loading { padding: 3rem 0; text-align: center; }
+
+.loading-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-cyan);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 15px var(--color-cyan);
+  margin-bottom: 2rem;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.loading-messages {
+  max-width: 500px;
+  margin: 2rem auto;
+  text-align: left;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  background: rgba(0, 0, 0, 0.6);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 2;
+  min-height: 250px;
+}
+
+.loading-message { color: var(--color-text-dim); opacity: 0; transition: opacity 0.3s ease; }
+.loading-message.active { opacity: 1; color: var(--color-cyan); }
+.loading-message.done { opacity: 1; color: var(--color-green); }
+.loading-message.done::after { content: ' [完了]'; color: var(--color-green); font-size: 0.85em; }
+
+.loading-bar {
+  height: 12px;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid var(--color-cyan);
+  margin: 2rem auto;
+  max-width: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-magenta));
+  box-shadow: 0 0 10px var(--color-cyan);
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+.loading-notes {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  margin-top: 2rem;
+  letter-spacing: 0.05em;
+}
+
+.screen-result { padding: 1rem 0; }
+
+.result-document {
+  border: 2px solid var(--color-cyan);
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2rem 1.5rem;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+.result-classified {
+  font-family: var(--font-mono);
+  color: var(--color-red);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+  padding: 0.5rem;
+  border: 1px dashed var(--color-red);
+  margin-bottom: 1.5rem;
+  animation: flicker 3s infinite;
+}
+
+.result-doc-header {
+  text-align: center;
+  border-bottom: 1px dashed rgba(0, 255, 255, 0.4);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.result-doc-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--color-cyan);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.result-doc-meta {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.result-doc-meta .doc-number {
+  color: var(--color-yellow);
+  letter-spacing: 0.05em;
+}
+
+.result-judgment {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border: 2px solid var(--color-red);
+  background: rgba(255, 51, 68, 0.05);
+  box-shadow: 0 0 20px rgba(255, 51, 68, 0.2);
+}
+
+.result-judgment-label {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.result-judgment-lv {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--color-red);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 15px var(--color-red);
+}
+
+.result-judgment-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  color: var(--color-magenta);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px var(--color-magenta);
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+
+.result-percent {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.result-percent-item { text-align: center; }
+
+.result-percent-label {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+.result-percent-value {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--color-yellow);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px var(--color-yellow);
+}
+
+.result-section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 3px solid var(--color-cyan);
+}
+
+.result-section-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 8px var(--color-cyan);
+}
+
+.result-section-body {
+  font-family: var(--font-jp);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.result-section-body em {
+  color: var(--color-red);
+  font-style: normal;
+  font-weight: 700;
+  text-shadow: 0 0 8px var(--color-red);
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.action-button {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: 2px solid;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: block;
+}
+
+.action-button.primary {
+  color: var(--color-magenta);
+  border-color: var(--color-magenta);
+  text-shadow: 0 0 10px var(--color-magenta);
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3), inset 0 0 15px rgba(255, 0, 255, 0.05);
+}
+
+.action-button.primary:hover {
+  background: rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.6);
+}
+
+.action-button.secondary {
+  color: var(--color-cyan);
+  border-color: var(--color-cyan);
+  text-shadow: 0 0 10px var(--color-cyan);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.action-button.secondary:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+}
+
+.action-button.app {
+  color: var(--color-yellow);
+  border-color: var(--color-yellow);
+  text-shadow: 0 0 10px var(--color-yellow);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+}
+
+.action-button.app:hover {
+  background: rgba(255, 204, 0, 0.1);
+  box-shadow: 0 0 25px rgba(255, 204, 0, 0.6);
+}
+
+.site-footer {
+  max-width: 800px;
+  margin: 4rem auto 2rem;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid rgba(0, 255, 255, 0.4);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--color-cyan);
+  letter-spacing: 0.15em;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px var(--color-cyan);
+}
+
+.footer-section {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px dashed rgba(0, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.footer-section-title {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-cyan);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+
+.footer-section-body {
+  font-family: var(--font-jp);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.footer-link {
+  display: inline-block;
+  font-family: var(--font-mono);
+  color: var(--color-magenta);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-magenta);
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+}
+
+.footer-link:hover {
+  background: rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 10px var(--color-magenta);
+}
+
+.footer-disclaimer {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  line-height: 1.7;
+  margin-top: 1rem;
+}
+
+.footer-copyright {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  letter-spacing: 0.1em;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(0, 255, 255, 0.3);
+}
+
+@media (max-width: 600px) {
+  .site-header { flex-direction: column; align-items: flex-start; }
+  main { padding: 1rem; }
+  .result-document { padding: 1.5rem 1rem; }
+  .top-sub-catch { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="site-brand">DOPAGAKI ANALYSIS</div>
+    <div class="site-subtitle">// 脳波解析部</div>
+  </div>
+  <div class="rec-indicator">
+    <span class="rec-dot"></span>
+    <span>REC</span>
+  </div>
+</header>
+
+<main>
+
+<section class="screen screen-top active" id="screen-top">
+  <div class="top-bracket-line">// SYSTEM ONLINE</div>
+  <h1 class="top-main-title">DOPAGAKI ANALYSIS</h1>
+  <div class="top-subtitle">ドパガキ防衛局 脳波解析部</div>
+
+  <div class="top-main-catch">
+    あなたの脳は、<br>
+    どれだけ<span class="highlight">侵食</span>されているか?
+  </div>
+
+  <div class="top-sub-catch">
+    DOPAGAKI防衛局が提供する、無料の脳波侵食率測定サービスです。
+    10問の設問にご回答いただくことで、あなたの脳のドーパミン依存度を診断いたします。
+    <br><br>
+    <div class="info-line">
+      <span class="info-label">所要時間</span>
+      <span class="info-value">約2〜3分</span>
+    </div>
+    <div class="info-line">
+      <span class="info-label">設問数</span>
+      <span class="info-value">10問</span>
+    </div>
+    <div class="info-line">
+      <span class="info-label">診断書発行</span>
+      <span class="info-value">X (Twitter) シェア対応</span>
+    </div>
+    <div class="info-line">
+      <span class="info-label">料金</span>
+      <span class="info-value">無料</span>
+    </div>
+  </div>
+
+  <button class="cta-button" onclick="startQuiz()">[ 脳波解析を開始する → ]</button>
+
+  <div class="top-footer-notes">
+    ※ 本診断は DOPAGAKI防衛局 脳波解析部と<br>
+    ドパガキ防止法アプリ開発部門の協力により提供されています。<br>
+    ※ 診断結果は統計データとして匿名で記録される場合があります。
+  </div>
+</section>
+
+<section class="screen screen-question" id="screen-question">
+  <div class="question-progress">
+    <div class="question-progress-label">
+      <span>[ 設問 <span id="current-q-num">1</span> / 10 ]</span>
+      <span><span id="progress-percent">10</span>%</span>
+    </div>
+    <div class="question-progress-bar">
+      <div class="question-progress-fill" id="progress-fill" style="width:10%"></div>
+    </div>
+  </div>
+
+  <div class="question-no" id="q-no">設問 No.001</div>
+  <div class="question-title" id="q-title">[ 項目名 ]</div>
+  <div class="question-text" id="q-text">質問文がここに入ります</div>
+  <div class="question-options" id="q-options"></div>
+</section>
+
+<section class="screen screen-loading" id="screen-loading">
+  <div class="loading-title">[ 脳波解析中 ]</div>
+
+  <div class="loading-messages" id="loading-messages">
+    <div class="loading-message">[1] 回答データを送信中...</div>
+    <div class="loading-message">[2] 中央脳波データベース (CBDB) と照合中...</div>
+    <div class="loading-message">[3] ドーパミン放出系の異常度を計算中...</div>
+    <div class="loading-message">[4] DOPAGAKI ALERT 判定値を算出中...</div>
+    <div class="loading-message">[5] 診断書を発行中...</div>
+  </div>
+
+  <div class="loading-bar">
+    <div class="loading-bar-fill" id="loading-bar-fill"></div>
+  </div>
+
+  <div class="loading-notes">
+    ※ 処理を中断しないでください。<br>
+    ※ 通信状態が不安定な場合、再診断が必要となる場合があります。
+  </div>
+</section>
+
+<section class="screen screen-result" id="screen-result">
+  <div class="result-document">
+    <div class="result-classified">[ CLASSIFIED · 取扱注意 · 部外秘 ]</div>
+
+    <div class="result-doc-header">
+      <div class="result-doc-title">DOPAGAKI防衛局 脳波解析 診断書</div>
+      <div class="result-doc-meta">
+        診断書 <span class="doc-number" id="result-doc-num">#DOPAGAKI-CLASSIFIED-XXXX</span><br>
+        発行日: <span id="result-date">2026-06-01</span><br>
+        受診者ID: <span id="result-subject-id">GUEST-XXXXX</span>
+      </div>
+    </div>
+
+    <div class="result-judgment">
+      <div class="result-judgment-label">// 判定結果</div>
+      <div class="result-judgment-lv" id="result-lv">DOPAGAKI ALERT LV.X</div>
+      <div class="result-judgment-name" id="result-name">"NAME"</div>
+      <div class="result-percent">
+        <div class="result-percent-item">
+          <div class="result-percent-label">脳侵食率</div>
+          <div class="result-percent-value" id="result-percent">XX%</div>
+        </div>
+        <div class="result-percent-item">
+          <div class="result-percent-label">スコア</div>
+          <div class="result-percent-value" id="result-score">XX / 30</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title">【 所見 】</div>
+      <div class="result-section-body" id="result-shoken"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title">【 推奨処置 】</div>
+      <div class="result-section-body" id="result-shochi"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title">【 処方薬 】</div>
+      <div class="result-section-body" id="result-shohou"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-section-title">【 備考 】</div>
+      <div class="result-section-body" id="result-biko"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="action-button primary" onclick="shareToX()">[ X で診断書をシェア → ]</button>
+      <button class="action-button secondary" onclick="restart()">[ もう一度診断する ]</button>
+      <a href="#footer-app" class="action-button app">[ ドパガキ防止法アプリ詳細 → ]</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-title">// DOPAGAKI 連邦サービス</div>
+
+  <div class="footer-section" id="footer-app">
+    <div class="footer-section-title">[ 公式介入ツール ]</div>
+    <div class="footer-section-body">
+      <strong style="color:var(--color-yellow)">ドパガキ防止法</strong> - SNS 視聴時間制限アプリケーション<br>
+      強制プログラム (月額¥500) により、SNS の物理的な視聴制限を実現します。
+      <br>
+      <a href="#" class="footer-link" id="play-store-link">[ Google Play で入手 → ]</a>
+      <span style="font-family:var(--font-mono);font-size:0.85rem;color:var(--color-text-dim);margin-left:0.5rem">※ 近日公開予定</span>
+    </div>
+  </div>
+
+  <div class="footer-section">
+    <div class="footer-section-title">[ 関連機関 ]</div>
+    <div class="footer-section-body">
+      <strong style="color:var(--color-magenta)">DOPAGAKI NETWORK</strong> - 関連偽広告コーポレートサイト<br>
+      <a href="https://h01m1.github.io/dopagaki-ad-trap/" class="footer-link" target="_blank" rel="noopener">[ サイトを見る → ]</a>
+    </div>
+  </div>
+
+  <div class="footer-section">
+    <div class="footer-section-title">[ 運営について ]</div>
+    <div class="footer-disclaimer">
+      本サービスは「DOPAGAKI防衛局」(架空の機関) が運営する、ジョーク・パロディサイトです。<br>
+      実在の政府機関、医療機関ではありません。<br>
+      診断結果は医学的・法的根拠を持つものではありません。
+    </div>
+  </div>
+
+  <div class="footer-copyright">
+    © DOPAGAKI防衛局 2026
+  </div>
+</footer>
+
+<script>
+const questions = [
+  { no:1, title:"[ スマートフォン使用目的 ]", text:"あなたがスマートフォンを使用する主な目的をお選びください。",
+    options:[{text:"通話・メッセージ・業務などの実務利用が主体",score:0},{text:"学習・情報収集・ニュース閲覧が中心",score:1},{text:"娯楽・コミュニケーションが中心",score:2},{text:"気分転換・暇つぶしのため",score:3}]},
+  { no:2, title:"[ 起床時行動パターン ]", text:"起床後、最初に行う行動を以下からお選びください。",
+    options:[{text:"顔を洗う・着替える等の身支度を行う",score:0},{text:"二度寝、または特に行動しない",score:1},{text:"スマートフォンの通知を確認する",score:2},{text:"TikTok / YouTube / Instagram / X を閲覧する",score:3}]},
+  { no:3, title:"[ 就寝時 SNS 使用状況 ]", text:"就寝直前、SNS アプリケーション (TikTok / YouTube / Instagram / X 等) を使用しますか?",
+    options:[{text:"使用しない (アラーム・読書アプリ等のみ)",score:0},{text:"使用する",score:3}]},
+  { no:4, title:"[ コンテンツ視聴時の気付き頻度 ]", text:"動画や SNS を閲覧中、時計を見て「想定より時間が経過していた」と感じることはありますか?",
+    options:[{text:"経験がない",score:0},{text:"月に1回程度ある",score:1},{text:"週に数回ある",score:2},{text:"ほぼ毎日ある",score:3}]},
+  { no:5, title:"[ 対面会話中の機器保持状態 ]", text:"友人・家族との対面会話中、スマートフォンの状態として最も当てはまるものをお選びください。",
+    options:[{text:"カバン・ポケットから出さない",score:0},{text:"テーブル上に置く",score:1},{text:"時折手に取って確認する",score:2},{text:"常に手に持っている",score:3}]},
+  { no:6, title:"[ 通知不在時の心理状態 ]", text:"SNS の通知が長時間来ない場合の心理状態として、最も当てはまるものをお選びください。",
+    options:[{text:"特に何も感じない",score:0},{text:"少し気になる",score:1},{text:"短い間隔で何度も確認してしまう",score:2},{text:"ずっと見ているので、そんなことを気にしたことはない",score:3}]},
+  { no:7, title:"[ SNS 非接触最長時間 ]", text:"起きている時間のうち、スマートフォン (SNS アプリ) を連続して触らない最長時間として、最も近いものをお選びください。",
+    options:[{text:"4時間以上",score:0},{text:"2〜4時間程度",score:1},{text:"1〜2時間程度",score:2},{text:"30分以内 (常に手元にある)",score:3}]},
+  { no:8, title:"[ トイレ内における機器使用頻度 ]", text:"トイレでスマートフォンを使用することはありますか? 最も近いものをお選びください。",
+    options:[{text:"持ち込まない",score:0},{text:"持ち込むが、緊急の連絡時のみ確認する",score:1},{text:"トイレ内で SNS を閲覧することがある",score:2},{text:"用を足した後も、スマートフォンの使用で長時間滞在することがある",score:3}]},
+  { no:9, title:"[ 食事時のスマートフォン位置 ]", text:"食事中、スマートフォンの位置として最も近いものをお選びください。",
+    options:[{text:"カバン・バッグの中",score:0},{text:"ポケットの中",score:1},{text:"テーブル上",score:2},{text:"手に持っている、または操作しながら食事している",score:3}]},
+  { no:10, title:"[ 無意識下での機器操作頻度 ]", text:"SNS を見ていない時間に、無意識にスマートフォンを手に取る頻度として、最も当てはまるものをお選びください。",
+    options:[{text:"全くない",score:0},{text:"稀にある",score:1},{text:"頻繁にある",score:2},{text:"常に手元にあり、無意識に開いている",score:3}]}
+];
+
+const levels = [
+  { lv:0, name:"NORMAL CITIZEN", scoreMin:0, scoreMax:3, percentMin:0, percentMax:10,
+    shareText:"私は希少種に認定されました。",
+    shoken:"被験者の SNS 依存指標は著しく低い水準にあります。\nドーパミン放出系に異常は検出されず、脳機能は健全に保たれています。\nSNS との健全な距離が保たれている、模範的な脳波パターンです。",
+    shochi:"現在の生活様式の維持を強く推奨します。\n本診断を受診された時点で、SNS との距離感への一定の意識があると推測されます。\n予防的観点から「ドパガキ防止法」アプリの導入をご検討ください。",
+    shohou:"不要 (予防目的での任意導入は可能)\n※ 強制プログラム (月額¥500) の適用は不要と判断されます。",
+    biko:"あなたのような健全な脳の持ち主は、現代社会において <em>希少種</em> です。\nDOPAGAKI防衛局は、あなたの脳に深い敬意を表します。"},
+  { lv:1, name:"WATCHED", scoreMin:4, scoreMax:9, percentMin:11, percentMax:30,
+    shareText:"私は観察対象リストに登録されました。",
+    shoken:"被験者には軽度の SNS 依存傾向が検出されました。\n脳機能への重大な影響は確認されておりませんが、ドーパミン放出系に若干の偏向が見受けられます。\nSNS との距離感に、わずかながら課題が生じ始めている段階です。",
+    shochi:"日常的な SNS 利用時間の意識的な管理を推奨します。\n進行を防ぐため、「ドパガキ防止法」アプリの予防的導入を検討してください。\n3ヶ月以内の再診を推奨します。",
+    shohou:"ドパガキ防止法アプリ (任意導入、予防目的)\n※ 強制プログラム (月額¥500) の導入は推奨レベル。",
+    biko:"あなたは現在、DOPAGAKI防衛局の <em>観察対象</em> リストに登録されました。\n今後3ヶ月の脳波変動を注視し、悪化が確認された場合は再診のご案内を差し上げます。"},
+  { lv:2, name:"ALERT", scoreMin:10, scoreMax:15, percentMin:31, percentMax:50,
+    shareText:"私は警告レベルでした。",
+    shoken:"被験者は中程度の SNS 依存状態にあります。\nドーパミン放出系の正常な機能に支障が生じており、SNS 視聴中の自制能力に明確な低下が観察されます。\n日常生活への侵食が始まっている段階です。",
+    shochi:"即時、SNS 利用時間制限機能の導入を強く推奨します。\n「ドパガキ防止法」アプリの導入は <em>必須レベル</em> です。\n「強制プログラム」(月額¥500) の早期適用をご検討ください。",
+    shohou:"ドパガキ防止法アプリ (必須)\n+ 強制プログラム (月額¥500、早期適用推奨)",
+    biko:"現状を放置した場合、<em>6ヶ月以内に LV.3 (CRITICAL) への移行</em> が予測されます。\nDOPAGAKI防衛局は、あなたの脳が次の段階に進むことを懸念しています。"},
+  { lv:3, name:"CRITICAL", scoreMin:16, scoreMax:21, percentMin:51, percentMax:70,
+    shareText:"私は重度依存と診断されました。",
+    shoken:"被験者は重度の SNS 依存状態にあります。\nドーパミン放出系に著しい異常が確認され、脳機能の正常な動作に重大な支障が生じています。\nSNS への精神的依存が日常生活全般に影響を及ぼし始めています。",
+    shochi:"直ちに、すべての SNS アプリケーションの使用時間制限を導入してください。\n「ドパガキ防止法」アプリの導入および「強制プログラム」(月額¥500) の <em>即時起動</em> を強く推奨します。\nこのまま放置した場合、社会生活への重大な影響が予測されます。",
+    shohou:"ドパガキ防止法アプリ + 強制プログラム (月額¥500、<em>即時必須</em>)\n※ 自制では既に対処困難な段階に到達しています。",
+    biko:"あなたの脳は、現在 <em>修復可能な最終段階</em> にあります。\nこれより重度の状態 (LV.4: BRAIN MELTING) に至った場合、<em>脳の物理的な性質変化</em> が観察される可能性があります。"},
+  { lv:4, name:"BRAIN MELTING", scoreMin:22, scoreMax:25, percentMin:71, percentMax:85,
+    shareText:"私の脳は溶け始めています。冷蔵保管が必要です。",
+    shoken:"被験者の脳は、<em>溶解の進行</em> が確認されています。\nドーパミン放出系は崩壊状態にあり、SNS への完全な精神的従属が観察されます。\n被験者の自由意志は、既に SNS アルゴリズムに大部分が委譲された状態です。\n<em>あなたの脳は、現在溶けています。</em>",
+    shochi:"直ちにすべての SNS アプリケーションをアンインストールし、最寄りの DOPAGAKI防衛局窓口に出頭してください。\n「ドパガキ防止法」アプリの導入および「強制プログラム」(月額¥500) の起動は、すでに <em>義務段階</em> です。\n24時間体制での脳波監視を推奨します。",
+    shohou:"ドパガキ防止法アプリ + 強制プログラム (月額¥500、<em>義務適用</em>)\n※ 既に医学的介入のみでは対処困難な段階に到達している可能性があります。",
+    biko:"あなたの脳は溶けています。<em>常温保存はお控えください。</em>\n<em>冷蔵庫での保管 (10℃以下、湿度50%以下) を強く推奨します。</em>\n直射日光は避けてください。"},
+  { lv:5, name:"DOPAGAKI LOST", scoreMin:26, scoreMax:30, percentMin:86, percentMax:100,
+    shareText:"私の脳はアイスクリームになりました。",
+    shoken:"被験者の脳は、<em>もはや有機物としての形態を保っていません。</em>\nドーパミン受容体は完全崩壊し、自由意志は SNS アルゴリズムに全面的に委譲されました。\n<em>あなたの脳は、アイスクリームのようだ. . .</em>",
+    shochi:"医学的観点からは、<em>もはや手遅れです。</em>\n残された脳細胞の保護と、社会への悪影響の最小化のため、「ドパガキ防止法」アプリの導入は <em>最終手段</em> としての位置づけとなります。\nDOPAGAKI防衛局は、<em>市民権剥奪手続きの開始</em> を検討する場合があります。",
+    shohou:"ドパガキ防止法アプリ + 強制プログラム (月額¥500、<em>絶対必須</em>)\n※ 科学的にはこの段階での介入効果は限定的ですが、<em>社会的責務</em> として導入を要請します。",
+    biko:"あなたの脳は、人類の脳機能崩壊の象徴として、<em>DOPAGAKI防衛局博物館への永久保存対象</em> に選定されました。\n※ 冷蔵保存は不可能な段階に到達しているため、<em>密閉容器での冷凍保管</em> を推奨します。\n※ 展示の際は、後世の警鐘として、お名前と侵食率を併記いたします。"}
+];
+
+let currentQuestionIndex = 0;
+let totalScore = 0;
+let currentResult = null;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startQuiz() {
+  currentQuestionIndex = 0;
+  totalScore = 0;
+  showScreen('screen-question');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestionIndex];
+  const percent = Math.round((currentQuestionIndex / questions.length) * 100);
+
+  document.getElementById('current-q-num').textContent = currentQuestionIndex + 1;
+  document.getElementById('progress-percent').textContent = percent + '%';
+  document.getElementById('progress-fill').style.width = percent + '%';
+
+  document.getElementById('q-no').textContent = '設問 No.' + String(q.no).padStart(3, '0');
+  document.getElementById('q-title').textContent = q.title;
+  document.getElementById('q-text').textContent = q.text;
+
+  const c = document.getElementById('q-options');
+  c.innerHTML = '';
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-button';
+    btn.innerHTML = '<span class="option-marker">[' + String.fromCharCode(65 + idx) + ']</span><span>' + opt.text + '</span>';
+    btn.onclick = () => answerQuestion(opt.score);
+    c.appendChild(btn);
+  });
+}
+
+function answerQuestion(score) {
+  totalScore += score;
+  currentQuestionIndex++;
+  if (currentQuestionIndex >= questions.length) {
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-percent').textContent = '100%';
+    startLoading();
+  } else {
+    renderQuestion();
+  }
+}
+
+function startLoading() {
+  showScreen('screen-loading');
+  const msgs = document.querySelectorAll('.loading-message');
+  const bar = document.getElementById('loading-bar-fill');
+  const step = 700;
+  msgs.forEach(m => { m.classList.remove('active', 'done'); });
+  bar.style.width = '0%';
+
+  msgs.forEach((msg, idx) => {
+    setTimeout(() => {
+      if (idx > 0) {
+        msgs[idx - 1].classList.remove('active');
+        msgs[idx - 1].classList.add('done');
+      }
+      msg.classList.add('active');
+      bar.style.width = (((idx + 1) / msgs.length) * 100) + '%';
+    }, idx * step);
+  });
+
+  setTimeout(() => {
+    msgs[msgs.length - 1].classList.remove('active');
+    msgs[msgs.length - 1].classList.add('done');
+    setTimeout(showResult, 500);
+  }, msgs.length * step);
+}
+
+function getLevelByScore(s) {
+  for (const lv of levels) {
+    if (s >= lv.scoreMin && s <= lv.scoreMax) return lv;
+  }
+  return levels[levels.length - 1];
+}
+
+function calcPercent(score, lv) {
+  const sr = lv.scoreMax - lv.scoreMin;
+  const pr = lv.percentMax - lv.percentMin;
+  if (sr === 0) return lv.percentMin;
+  return Math.round(lv.percentMin + ((score - lv.scoreMin) / sr) * pr);
+}
+
+function generateDocNumber() {
+  const d = new Date();
+  const ymd = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0');
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let h = '';
+  for (let i = 0; i < 5; i++) h += chars[Math.floor(Math.random() * chars.length)];
+  return '#DOPAGAKI-CLASSIFIED-' + ymd + '-' + h;
+}
+
+function generateSubjectId() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let id = 'GUEST-';
+  for (let i = 0; i < 5; i++) id += chars[Math.floor(Math.random() * chars.length)];
+  return id;
+}
+
+function formatDate(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function showResult() {
+  const lv = getLevelByScore(totalScore);
+  const pc = calcPercent(totalScore, lv);
+  currentResult = { score: totalScore, level: lv, percent: pc };
+
+  document.getElementById('result-doc-num').textContent = generateDocNumber();
+  document.getElementById('result-date').textContent = formatDate(new Date());
+  document.getElementById('result-subject-id').textContent = generateSubjectId();
+  document.getElementById('result-lv').textContent = 'DOPAGAKI ALERT LV.' + lv.lv;
+  document.getElementById('result-name').textContent = '"' + lv.name + '"';
+  document.getElementById('result-percent').textContent = pc + '%';
+  document.getElementById('result-score').textContent = totalScore + ' / 30';
+  document.getElementById('result-shoken').innerHTML = lv.shoken;
+  document.getElementById('result-shochi').innerHTML = lv.shochi;
+  document.getElementById('result-shohou').innerHTML = lv.shohou;
+  document.getElementById('result-biko').innerHTML = lv.biko;
+
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('score', totalScore);
+    url.searchParams.set('lv', lv.lv);
+    window.history.replaceState({}, '', url.toString());
+  } catch (e) {}
+
+  showScreen('screen-result');
+}
+
+function shareToX() {
+  if (!currentResult) return;
+  const lv = currentResult.level;
+  const url = new URL(window.location.origin + window.location.pathname);
+  url.searchParams.set('score', currentResult.score);
+  url.searchParams.set('lv', lv.lv);
+  const text = lv.shareText + '\n脳侵食率 ' + currentResult.percent + '% (' + lv.name + ')\n#DOPAGAKI診断 #ドパガキ防止法\n' + url.toString();
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
+}
+
+function restart() {
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('score');
+    url.searchParams.delete('lv');
+    window.history.replaceState({}, '', url.toString());
+  } catch (e) {}
+  currentQuestionIndex = 0;
+  totalScore = 0;
+  currentResult = null;
+  showScreen('screen-top');
+}
+
+function loadFromURLParams() {
+  try {
+    const url = new URL(window.location.href);
+    const sp = url.searchParams.get('score');
+    const lvp = url.searchParams.get('lv');
+    if (sp !== null && lvp !== null) {
+      const s = parseInt(sp, 10);
+      const l = parseInt(lvp, 10);
+      if (!isNaN(s) && !isNaN(l) && s >= 0 && s <= 30 && l >= 0 && l <= 5) {
+        totalScore = s;
+        showResult();
+        return true;
+      }
+    }
+  } catch (e) {}
+  return false;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (!loadFromURLParams()) showScreen('screen-top');
+});
+</script>
+
+</body>
+</html>
