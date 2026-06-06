@@ -1222,6 +1222,62 @@ main {
     padding: 3rem 0.5rem 1rem;
   }
 }
+
+/* ===================================================================
+   v3: 動画再生ボタン (overlay play button) を完全非表示
+   iOS Safari の autoplay 失敗時、 大きな再生ボタンが出るのを防ぐ
+   =================================================================== */
+.result-video-container video::-webkit-media-controls-overlay-play-button,
+.result-video-container video::-webkit-media-controls-start-playback-button,
+.result-video-container video::-webkit-media-controls,
+.result-video-container video::-webkit-media-controls-panel,
+.result-video-container video::-webkit-media-controls-enclosure {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.result-video-container video {
+  outline: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ===================================================================
+   v3: 結果画面上部余白の縮小 (スマホ FV に動画 + 判定文を両方収める)
+   =================================================================== */
+#screen-result {
+  padding-top: 0.5rem;
+}
+
+#screen-result .result-document {
+  padding-top: 1rem;
+}
+
+#screen-result .result-judgment {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+#screen-result .result-video-container {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  #screen-result {
+    padding-top: 0.25rem;
+  }
+  #screen-result .result-document {
+    padding: 0.75rem 1rem;
+  }
+  .result-judgment-text {
+    font-size: 1.1rem;
+    margin: 0.5rem auto 1rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -1650,9 +1706,28 @@ function showResult() {
       video.poster = 'assets/mrdp_lv' + lv.lv + '.png';
     }
     video.load();
+    // 動画再生 (autoplay 失敗時は画面タップ / スクロールでリトライ)
     const playPromise = video.play();
     if (playPromise && typeof playPromise.catch === 'function') {
-      playPromise.catch(() => {});
+      playPromise.catch(() => {
+        // 前回試行のリスナー残りを排除
+        if (window._videoPlayRetryHandler) {
+          document.removeEventListener('touchstart', window._videoPlayRetryHandler, true);
+          document.removeEventListener('click', window._videoPlayRetryHandler, true);
+          document.removeEventListener('scroll', window._videoPlayRetryHandler, true);
+        }
+        window._videoPlayRetryHandler = () => {
+          video.play().then(() => {
+            document.removeEventListener('touchstart', window._videoPlayRetryHandler, true);
+            document.removeEventListener('click', window._videoPlayRetryHandler, true);
+            document.removeEventListener('scroll', window._videoPlayRetryHandler, true);
+            window._videoPlayRetryHandler = null;
+          }).catch(() => {});
+        };
+        document.addEventListener('touchstart', window._videoPlayRetryHandler, true);
+        document.addEventListener('click', window._videoPlayRetryHandler, true);
+        document.addEventListener('scroll', window._videoPlayRetryHandler, true);
+      });
     }
   }
   if (container) {
