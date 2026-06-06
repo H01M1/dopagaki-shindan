@@ -1269,6 +1269,22 @@ main {
     margin: 0.5rem auto 1rem;
   }
 }
+
+/* ===================================================================
+   v5: スマホ表示で REC インジケーターを右上に絶対配置
+   (デスクトップでは元の位置を維持)
+   =================================================================== */
+@media (max-width: 600px) {
+  .site-header {
+    position: relative;
+  }
+  .rec-indicator {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    margin: 0 !important;
+  }
+}
 </style>
 </head>
 <body>
