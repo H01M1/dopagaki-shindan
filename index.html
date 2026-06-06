@@ -1495,7 +1495,7 @@ const levels = [
     shoken: "あなたの脳から SNS 系の電波が全く検出されません　むしろ稀少すぎて測定不能です",
     shochi: "そのまま生きていてください　社会的サンプルとして保護対象に指定します",
     biko: "ドパガキ防衛局・希少種登録ファイルへ転送しました",
-    appCardText: "念のため、 ドパガキ防衛局公認アプリの存在だけ覚えておいてください"
+    appCardText: "念のため、<br>ドパガキ防衛局公認アプリの存在だけ覚えておいてください"
   },
   {
     lv: 1,
@@ -1555,7 +1555,7 @@ const levels = [
     shoken: "あなたの脳は完全に液状化しました　もう人格はありません",
     shochi: "ドパガキ博物館への寄贈手続きが完了しました",
     biko: "ご家族には心よりお悔やみ申し上げます　さようなら",
-    appCardText: "手遅れかもしれませんが　念のため強制プログラムを起動せよ"
+    appCardText: "手遅れかもしれませんが<br>念のため強制プログラムを起動せよ"
   }
 ];
 
@@ -1713,7 +1713,7 @@ function showResult() {
   document.getElementById('result-biko').innerHTML = lv.biko;
 
   // アプリ誘導カード
-  document.getElementById('app-cta-text').textContent = lv.appCardText;
+  document.getElementById('app-cta-text').innerHTML = lv.appCardText;
 
   try {
     const url = new URL(window.location.href);
@@ -1822,7 +1822,7 @@ window.addEventListener('DOMContentLoaded', () => {
       <div class="app-cta-text" id="app-cta-text"></div>
       <a href="https://play.google.com/store/apps/details?id=com.dopagaki.app"
          target="_blank" rel="noopener"
-         class="app-cta-button">▼ ドパガキ防止法をダウンロード</a>
+         class="app-cta-button">▼ ドパガキ防止法を<br>ダウンロード</a>
     </div>
     <button class="x-share-btn" id="x-share-btn" onclick="shareToX()">
       <span class="x-share-icon">𝕏</span>
