@@ -421,7 +421,7 @@ main {
   text-align: center;
   padding: 0.5rem;
   border: 1px dashed var(--color-red);
-  margin-bottom: 1.5rem;
+  margin: 2.5rem 0 1.5rem;
   animation: flicker 3s infinite;
 }
 
@@ -1316,24 +1316,15 @@ main {
 
 <section class="screen screen-result" id="screen-result">
   <div class="result-document">
-    <div class="result-classified">[ CLASSIFIED · 取扱注意 · 部外秘 ]</div>
-
-    <div class="result-doc-header">
-      <div class="result-doc-title">DOPAGAKI防衛局 脳波解析 診断書</div>
-      <div class="result-doc-meta">
-        診断書 <span class="doc-number" id="result-doc-num">#DOPAGAKI-CLASSIFIED-XXXX</span><br>
-        発行日: <span id="result-date">2026-06-01</span><br>
-        受診者ID: <span id="result-subject-id">GUEST-XXXXX</span>
-      </div>
-    </div>
-
+    <!-- 1. 動画 (最上部 = スマホで開いた瞬間に表示) -->
     <div class="result-judgment">
-      <div class="result-judgment-label">// 判定結果</div>
       <div class="result-video-container" id="result-video-container">
         <video id="result-video" autoplay loop muted playsinline></video>
       </div>
-      <div class="result-judgment-lv" id="result-lv">DOPAGAKI ALERT LV.X</div>
+      <!-- 2. 判定文 -->
       <div class="result-judgment-text" id="result-judgment-text"></div>
+      <!-- 3. DOPAGAKI ALERT LV.X -->
+      <div class="result-judgment-lv" id="result-lv">DOPAGAKI ALERT LV.X</div>
       <div class="result-judgment-name" id="result-name">"NAME"</div>
       <div class="result-percent">
         <div class="result-percent-item">
@@ -1347,21 +1338,37 @@ main {
       </div>
     </div>
 
+    <!-- 4. 所見 -->
     <div class="result-section">
       <div class="result-section-title">【 所見 】</div>
       <div class="result-section-body" id="result-shoken"></div>
     </div>
 
+    <!-- 5. 推奨処置 -->
     <div class="result-section">
       <div class="result-section-title">【 推奨処置 】</div>
       <div class="result-section-body" id="result-shochi"></div>
     </div>
 
+    <!-- 6. 備考 -->
     <div class="result-section">
       <div class="result-section-title">【 備考 】</div>
       <div class="result-section-body" id="result-biko"></div>
     </div>
 
+    <!-- 7-9. 診断書ヘッダー (最上部から最下部へ移動) -->
+    <div class="result-classified">[ CLASSIFIED · 取扱注意 · 部外秘 ]</div>
+
+    <div class="result-doc-header">
+      <div class="result-doc-title">DOPAGAKI防衛局 脳波解析 診断書</div>
+      <div class="result-doc-meta">
+        診断書 <span class="doc-number" id="result-doc-num">#DOPAGAKI-CLASSIFIED-XXXX</span><br>
+        発行日: <span id="result-date">2026-06-01</span><br>
+        受診者ID: <span id="result-subject-id">GUEST-XXXXX</span>
+      </div>
+    </div>
+
+    <!-- 10. もう一度診断する -->
     <div class="result-actions">
       <button class="action-button secondary" onclick="restart()">[ もう一度診断する ]</button>
     </div>
