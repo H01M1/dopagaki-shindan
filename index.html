@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DOPAGAKI ANALYSIS - ドパガキ防衛局 脳波解析部</title>
-<meta name="description" content="DOPAGAKI防衛局が提供する、無料の脳波侵食率測定サービス。10問の設問にご回答いただくことで、あなたの脳のドーパミン依存度を診断いたします。">
+<meta name="description" content="DOPAGAKI 防衛局が提供する脳波侵食率測定サービス。 あなたのドパガキ侵食度を診断します">
 <meta property="og:title" content="DOPAGAKI ANALYSIS - 脳波解析センター">
 <meta property="og:description" content="あなたの脳は、どれだけ侵食されているか?">
 <meta property="og:type" content="website">
@@ -712,6 +712,516 @@ main {
   .result-document { padding: 1.5rem 1rem; }
   .top-sub-catch { padding: 1rem; }
 }
+
+/* ===== v2: 動画コンテナ (結果画面) ===== */
+.result-video-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 1rem auto 1.5rem;
+  aspect-ratio: 9 / 16;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--color-cyan);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+  position: relative;
+}
+
+.result-video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* === LV.5 専用 強化版 (渦 + 激しい歪み) === */
+.result-video-container.lv5-warp {
+  position: relative;
+  overflow: hidden;
+}
+
+/* 渦のオーバーレイ (conic-gradient で回転) */
+.result-video-container.lv5-warp::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 0, 128, 0.0) 0%,
+    rgba(255, 0, 128, 0.45) 12%,
+    rgba(0, 229, 255, 0.0) 25%,
+    rgba(0, 229, 255, 0.45) 37%,
+    rgba(255, 0, 128, 0.0) 50%,
+    rgba(255, 0, 128, 0.45) 62%,
+    rgba(0, 229, 255, 0.0) 75%,
+    rgba(0, 229, 255, 0.45) 87%,
+    rgba(255, 0, 128, 0.0) 100%
+  );
+  animation: lv5_swirl 1.2s linear infinite;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 渦の中心に向かう放射エフェクト (追加レイヤー) */
+.result-video-container.lv5-warp::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent 20%,
+    rgba(0, 229, 255, 0.2) 50%,
+    rgba(255, 0, 128, 0.3) 80%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  animation: lv5_pulse 1.6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+  mix-blend-mode: overlay;
+}
+
+.result-video-container.lv5-warp video {
+  animation: lv5_warp_intense 0.5s infinite ease-in-out;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes lv5_warp_intense {
+  0%, 100% {
+    transform: scale(1.0) rotate(0deg) skew(0deg, 0deg);
+    filter: hue-rotate(0deg) saturate(1.0) blur(0px);
+  }
+  16% {
+    transform: scale(1.22) rotate(-5deg) skew(5deg, 2deg);
+    filter: hue-rotate(70deg) saturate(1.8) blur(0.7px);
+  }
+  33% {
+    transform: scale(1.20) rotate(4deg) skew(-4deg, -3deg);
+    filter: hue-rotate(-70deg) saturate(2.0) blur(0px);
+  }
+  50% {
+    transform: scale(1.30) rotate(-6deg) skew(6deg, 3deg);
+    filter: hue-rotate(110deg) saturate(2.4) blur(1.2px);
+  }
+  66% {
+    transform: scale(1.25) rotate(5deg) skew(-5deg, -3deg);
+    filter: hue-rotate(-110deg) saturate(2.2) blur(0px);
+  }
+  83% {
+    transform: scale(1.18) rotate(-4deg) skew(4deg, 2deg);
+    filter: hue-rotate(40deg) saturate(1.9) blur(0.5px);
+  }
+}
+
+@keyframes lv5_swirl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes lv5_pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1.0); }
+  50%      { opacity: 1.0; transform: scale(1.1); }
+}
+
+/* ===== v2: 判定文 (大きく目立つテキスト) ===== */
+.result-judgment-text {
+  font-family: var(--font-jp);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-cyan);
+  text-align: center;
+  margin: 1.5rem auto 2rem;
+  padding: 0 1rem;
+  line-height: 1.6;
+  text-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+  max-width: 600px;
+}
+
+/* ===== v2: アプリ誘導カード ===== */
+.app-cta-card {
+  margin: 2.5rem auto 1.5rem;
+  padding: 1.75rem 1.5rem;
+  max-width: 480px;
+  background: linear-gradient(135deg, rgba(255, 0, 255, 0.18), rgba(0, 255, 255, 0.18));
+  border: 2px solid var(--color-magenta);
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.3);
+}
+
+.app-cta-text {
+  font-family: var(--font-jp);
+  font-size: 1.05rem;
+  color: var(--color-text);
+  margin-bottom: 1.25rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+.app-cta-button {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--color-magenta);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  font-size: 1rem;
+  font-family: var(--font-display);
+  transition: all 0.2s ease;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+}
+
+.app-cta-button:hover {
+  background: #d000d0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(255, 0, 255, 0.7);
+}
+
+.app-cta-button:active {
+  transform: translateY(0);
+}
+
+/* ===== v2: ドパガキ通告書 X シェアボタン ===== */
+.x-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 1.5rem auto;
+  padding: 14px 32px;
+  max-width: 480px;
+  width: calc(100% - 32px);
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+}
+
+.x-share-btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.x-share-icon {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.x-share-label {
+  font-size: 1rem;
+}
+
+/* ===== v2: レスポンシブ (モバイル) ===== */
+@media (max-width: 600px) {
+  .result-video-container {
+    max-width: 100%;
+    margin: 0.5rem auto 1rem;
+  }
+  .result-judgment-text {
+    font-size: 1.2rem;
+  }
+  .app-cta-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* ===================================================================
+   v2: LV ごとのテーマカラー & 演出
+   =================================================================== */
+
+/* === LV テーマ変数 (結果画面親要素に lv-N クラスが付く前提) === */
+.screen.lv-0, .cta-overlay.lv-0 { --theme-color: #5DCAA5; --theme-glow: rgba(93, 202, 165, 0.4); }
+.screen.lv-1, .cta-overlay.lv-1 { --theme-color: #00E5FF; --theme-glow: rgba(0, 229, 255, 0.4); }
+.screen.lv-2, .cta-overlay.lv-2 { --theme-color: #EFC727; --theme-glow: rgba(239, 199, 39, 0.5); }
+.screen.lv-3, .cta-overlay.lv-3 { --theme-color: #FF6B1A; --theme-glow: rgba(255, 107, 26, 0.55); }
+.screen.lv-4, .cta-overlay.lv-4 { --theme-color: #FF3855; --theme-glow: rgba(255, 56, 85, 0.6); }
+.screen.lv-5, .cta-overlay.lv-5 { --theme-color: #FF0080; --theme-glow: rgba(255, 0, 128, 0.65); }
+
+/* === 共通: テーマカラー使う要素 === */
+.screen[class*="lv-"] .result-judgment-text {
+  color: var(--theme-color);
+  text-shadow: 0 0 15px var(--theme-glow);
+}
+
+.screen[class*="lv-"] .result-video-container {
+  border-color: var(--theme-color);
+  box-shadow: 0 0 30px var(--theme-glow);
+}
+
+.screen[class*="lv-"] .result-judgment-lv {
+  color: var(--theme-color);
+}
+
+.screen[class*="lv-"] .app-cta-card,
+.cta-overlay[class*="lv-"] .app-cta-card {
+  border-color: var(--theme-color);
+  background: linear-gradient(135deg,
+    rgba(0, 0, 0, 0.4),
+    var(--theme-glow));
+  box-shadow: 0 0 25px var(--theme-glow);
+}
+
+.screen[class*="lv-"] .app-cta-button,
+.cta-overlay[class*="lv-"] .app-cta-button {
+  background: var(--theme-color);
+  box-shadow: 0 0 15px var(--theme-glow);
+}
+
+.screen[class*="lv-"] .app-cta-button:hover,
+.cta-overlay[class*="lv-"] .app-cta-button:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 20px var(--theme-glow);
+}
+
+.screen[class*="lv-"] .x-share-btn,
+.cta-overlay[class*="lv-"] .x-share-btn {
+  border-color: var(--theme-color);
+  color: var(--theme-color);
+}
+
+.screen[class*="lv-"] .x-share-btn:hover,
+.cta-overlay[class*="lv-"] .x-share-btn:hover {
+  background: var(--theme-color);
+  color: #000;
+}
+
+/* === 背景脈動 (LV.2 以上) === */
+.screen.lv-2,
+.screen.lv-3,
+.screen.lv-4,
+.screen.lv-5 {
+  position: relative;
+}
+
+.screen.lv-2::before,
+.screen.lv-3::before,
+.screen.lv-4::before,
+.screen.lv-5::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 50%,
+    var(--theme-glow) 0%,
+    transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.screen.lv-2::before { animation: bg_pulse 4s infinite ease-in-out; }
+.screen.lv-3::before { animation: bg_pulse 2.5s infinite ease-in-out; }
+.screen.lv-4::before { animation: bg_pulse 1.5s infinite ease-in-out; }
+.screen.lv-5::before { animation: bg_pulse 0.8s infinite ease-in-out; }
+
+@keyframes bg_pulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%      { opacity: 0.7; transform: scale(1.3); }
+}
+
+/* === LV.4-5 だけ: 追加の背景グリッチレイヤー === */
+.screen.lv-4::after,
+.screen.lv-5::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 3px,
+      rgba(255, 0, 128, 0.05) 3px,
+      rgba(255, 0, 128, 0.05) 4px
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.screen.lv-4::after { animation: scanline_drift 4s linear infinite; }
+.screen.lv-5::after { animation: scanline_drift 1.5s linear infinite; }
+
+@keyframes scanline_drift {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(20px); }
+}
+
+/* === フォント揺れ (LV.3 以上) === */
+.screen.lv-3 .result-judgment-text {
+  animation: text_shake_subtle 0.15s infinite ease-in-out;
+}
+.screen.lv-4 .result-judgment-text {
+  animation: text_shake 0.12s infinite ease-in-out;
+}
+.screen.lv-5 .result-judgment-text {
+  animation: text_glitch 0.1s infinite steps(1);
+}
+
+@keyframes text_shake_subtle {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(1px, 0); }
+}
+
+@keyframes text_shake {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(-2px, 1px); }
+  50%      { transform: translate(2px, -1px); }
+  75%      { transform: translate(-1px, 0); }
+}
+
+@keyframes text_glitch {
+  0%, 100% {
+    transform: translate(0, 0);
+    text-shadow: 0 0 15px var(--theme-glow), 0 0 0 transparent;
+  }
+  20% {
+    transform: translate(-2px, 1px);
+    text-shadow: -3px 0 #00E5FF, 3px 0 #FF0080, 0 0 15px var(--theme-glow);
+  }
+  40% {
+    transform: translate(2px, -1px);
+    text-shadow: 3px 0 #00E5FF, -3px 0 #FF0080, 0 0 15px var(--theme-glow);
+  }
+  60% {
+    transform: translate(-1px, 0);
+    text-shadow: 0 0 15px var(--theme-glow);
+  }
+  80% {
+    transform: translate(1px, 0);
+    text-shadow: -2px 0 #00E5FF, 2px 0 #FF0080, 0 0 15px var(--theme-glow);
+  }
+}
+
+/* === LV.4-5: result-judgment-lv (DOPAGAKI ALERT LV.X) も揺らす === */
+.screen.lv-4 .result-judgment-lv {
+  animation: text_shake_subtle 0.18s infinite ease-in-out;
+}
+.screen.lv-5 .result-judgment-lv {
+  animation: text_glitch 0.12s infinite steps(1);
+}
+
+/* === LV.5: 結果セクションの本文もわずかにグリッチ === */
+.screen.lv-5 .result-section-body {
+  animation: text_jitter_subtle 0.3s infinite steps(1);
+}
+
+@keyframes text_jitter_subtle {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(1px, 0); }
+  66%      { transform: translate(-1px, 0); }
+}
+
+/* === コンテンツが背景レイヤーより前に来るように === */
+.screen[class*="lv-"] > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===================================================================
+   v2: CTA オーバーレイ (結果表示 8 秒後にフェードイン)
+   =================================================================== */
+
+.cta-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s ease-in, backdrop-filter 1.2s ease-in;
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.cta-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.cta-overlay-content {
+  position: relative;
+  max-width: 480px;
+  width: 100%;
+  padding: 2.5rem 1.5rem 1.5rem;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-overlay.visible .cta-overlay-content {
+  transform: translateY(0) scale(1);
+}
+
+.cta-overlay-close {
+  position: absolute;
+  top: 0;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  font-family: inherit;
+  line-height: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+  z-index: 1;
+}
+
+.cta-overlay-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: scale(1.1);
+}
+
+/* オーバーレイ内のカードは余白を調整 */
+.cta-overlay .app-cta-card {
+  margin: 0 auto 1rem;
+  max-width: 100%;
+}
+
+.cta-overlay .x-share-btn {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* モバイル対応 */
+@media (max-width: 600px) {
+  .cta-overlay-content {
+    padding: 3rem 0.5rem 1rem;
+  }
+}
 </style>
 </head>
 <body>
@@ -740,7 +1250,7 @@ main {
   </div>
 
   <div class="top-sub-catch">
-    DOPAGAKI防衛局が提供する、無料の脳波侵食率測定サービスです。
+    DOPAGAKI防衛局が提供する、脳波侵食率測定サービスです。
     10問の設問にご回答いただくことで、あなたの脳のドーパミン依存度を診断いたします。
     <br><br>
     <div class="info-line">
@@ -754,10 +1264,6 @@ main {
     <div class="info-line">
       <span class="info-label">診断書発行</span>
       <span class="info-value">X (Twitter) シェア対応</span>
-    </div>
-    <div class="info-line">
-      <span class="info-label">料金</span>
-      <span class="info-value">無料</span>
     </div>
   </div>
 
@@ -823,8 +1329,11 @@ main {
 
     <div class="result-judgment">
       <div class="result-judgment-label">// 判定結果</div>
+      <div class="result-video-container" id="result-video-container">
+        <video id="result-video" autoplay loop muted playsinline></video>
+      </div>
       <div class="result-judgment-lv" id="result-lv">DOPAGAKI ALERT LV.X</div>
-      <div class="result-char-box" id="result-char-box"></div>
+      <div class="result-judgment-text" id="result-judgment-text"></div>
       <div class="result-judgment-name" id="result-name">"NAME"</div>
       <div class="result-percent">
         <div class="result-percent-item">
@@ -849,19 +1358,12 @@ main {
     </div>
 
     <div class="result-section">
-      <div class="result-section-title">【 処方薬 】</div>
-      <div class="result-section-body" id="result-shohou"></div>
-    </div>
-
-    <div class="result-section">
       <div class="result-section-title">【 備考 】</div>
       <div class="result-section-body" id="result-biko"></div>
     </div>
 
     <div class="result-actions">
-      <button class="action-button primary" onclick="shareToX()">[ X で診断書をシェア → ]</button>
       <button class="action-button secondary" onclick="restart()">[ もう一度診断する ]</button>
-      <a href="#footer-app" class="action-button app">[ ドパガキ防止法アプリ詳細 → ]</a>
     </div>
   </div>
 </section>
@@ -875,7 +1377,7 @@ main {
     <div class="footer-section-title">[ 公式介入ツール ]</div>
     <div class="footer-section-body">
       <strong style="color:var(--color-yellow)">ドパガキ防止法</strong> - SNS 視聴時間制限アプリケーション<br>
-      強制プログラム (月額¥500) により、SNS の物理的な視聴制限を実現します。
+      強制プログラムにより、SNS の物理的な視聴制限を実現します。
       <br>
       <a href="#" class="footer-link" id="play-store-link">[ Google Play で入手 → ]</a>
       <span style="font-family:var(--font-mono);font-size:0.85rem;color:var(--color-text-dim);margin-left:0.5rem">※ 近日公開予定</span>
@@ -929,56 +1431,92 @@ const questions = [
 ];
 
 const levels = [
-  { lv:0, name:"NORMAL CITIZEN", scoreMin:0, scoreMax:3, percentMin:0, percentMax:10,
-    shareText:"私は希少種に認定されました。",
-    shoken:"被験者の SNS 依存指標は著しく低い水準にあります。\nドーパミン放出系に異常は検出されず、脳機能は健全に保たれています。\nSNS との健全な距離が保たれている、模範的な脳波パターンです。",
-    shochi:"現在の生活様式の維持を強く推奨します。\n本診断を受診された時点で、SNS との距離感への一定の意識があると推測されます。\n予防的観点から「ドパガキ防止法」アプリの導入をご検討ください。",
-    shohou:"不要 (予防目的での任意導入は可能)\n※ 強制プログラム (月額¥500) の適用は不要と判断されます。",
-    biko:"あなたのような健全な脳の持ち主は、現代社会において <em>希少種</em> です。\nDOPAGAKI防衛局は、あなたの脳に深い敬意を表します。"},
-  { lv:1, name:"WATCHED", scoreMin:4, scoreMax:9, percentMin:11, percentMax:30,
-    shareText:"私は観察対象リストに登録されました。",
-    shoken:"被験者には軽度の SNS 依存傾向が検出されました。\n脳機能への重大な影響は確認されておりませんが、ドーパミン放出系に若干の偏向が見受けられます。\nSNS との距離感に、わずかながら課題が生じ始めている段階です。",
-    shochi:"日常的な SNS 利用時間の意識的な管理を推奨します。\n進行を防ぐため、「ドパガキ防止法」アプリの予防的導入を検討してください。\n3ヶ月以内の再診を推奨します。",
-    shohou:"ドパガキ防止法アプリ (任意導入、予防目的)\n※ 強制プログラム (月額¥500) の導入は推奨レベル。",
-    biko:"あなたは現在、DOPAGAKI防衛局の <em>観察対象</em> リストに登録されました。\n今後3ヶ月の脳波変動を注視し、悪化が確認された場合は再診のご案内を差し上げます。"},
-  { lv:2, name:"ALERT", scoreMin:10, scoreMax:15, percentMin:31, percentMax:50,
-    shareText:"私は警告レベルでした。",
-    shoken:"被験者は中程度の SNS 依存状態にあります。\nドーパミン放出系の正常な機能に支障が生じており、SNS 視聴中の自制能力に明確な低下が観察されます。\n日常生活への侵食が始まっている段階です。",
-    shochi:"即時、SNS 利用時間制限機能の導入を強く推奨します。\n「ドパガキ防止法」アプリの導入は <em>必須レベル</em> です。\n「強制プログラム」(月額¥500) の早期適用をご検討ください。",
-    shohou:"ドパガキ防止法アプリ (必須)\n+ 強制プログラム (月額¥500、早期適用推奨)",
-    biko:"現状を放置した場合、<em>6ヶ月以内に LV.3 (CRITICAL) への移行</em> が予測されます。\nDOPAGAKI防衛局は、あなたの脳が次の段階に進むことを懸念しています。"},
-  { lv:3, name:"CRITICAL", scoreMin:16, scoreMax:21, percentMin:51, percentMax:70,
-    shareText:"私は重度依存と診断されました。",
-    shoken:"被験者は重度の SNS 依存状態にあります。\nドーパミン放出系に著しい異常が確認され、脳機能の正常な動作に重大な支障が生じています。\nSNS への精神的依存が日常生活全般に影響を及ぼし始めています。",
-    shochi:"直ちに、すべての SNS アプリケーションの使用時間制限を導入してください。\n「ドパガキ防止法」アプリの導入および「強制プログラム」(月額¥500) の <em>即時起動</em> を強く推奨します。\nこのまま放置した場合、社会生活への重大な影響が予測されます。",
-    shohou:"ドパガキ防止法アプリ + 強制プログラム (月額¥500、<em>即時必須</em>)\n※ 自制では既に対処困難な段階に到達しています。",
-    biko:"あなたの脳は、現在 <em>修復可能な最終段階</em> にあります。\nこれより重度の状態 (LV.4: BRAIN MELTING) に至った場合、<em>脳の物理的な性質変化</em> が観察される可能性があります。"},
-  { lv:4, name:"BRAIN MELTING", scoreMin:22, scoreMax:25, percentMin:71, percentMax:85,
-    shareText:"私の脳は溶け始めています。冷蔵保管が必要です。",
-    shoken:"被験者の脳は、<em>溶解の進行</em> が確認されています。\nドーパミン放出系は崩壊状態にあり、SNS への完全な精神的従属が観察されます。\n被験者の自由意志は、既に SNS アルゴリズムに大部分が委譲された状態です。\n<em>あなたの脳は、現在溶けています。</em>",
-    shochi:"直ちにすべての SNS アプリケーションをアンインストールし、最寄りの DOPAGAKI防衛局窓口に出頭してください。\n「ドパガキ防止法」アプリの導入および「強制プログラム」(月額¥500) の起動は、すでに <em>義務段階</em> です。\n24時間体制での脳波監視を推奨します。",
-    shohou:"ドパガキ防止法アプリ + 強制プログラム (月額¥500、<em>義務適用</em>)\n※ 既に医学的介入のみでは対処困難な段階に到達している可能性があります。",
-    biko:"あなたの脳は溶けています。<em>常温保存はお控えください。</em>\n<em>冷蔵庫での保管 (10℃以下、湿度50%以下) を強く推奨します。</em>\n直射日光は避けてください。"},
-  { lv:5, name:"DOPAGAKI LOST", scoreMin:26, scoreMax:30, percentMin:86, percentMax:100,
-    shareText:"私の脳はアイスクリームになりました。",
-    shoken:"被験者の脳は、<em>もはや有機物としての形態を保っていません。</em>\nドーパミン受容体は完全崩壊し、自由意志は SNS アルゴリズムに全面的に委譲されました。\n<em>あなたの脳は、アイスクリームのようだ. . .</em>",
-    shochi:"医学的観点からは、<em>もはや手遅れです。</em>\n残された脳細胞の保護と、社会への悪影響の最小化のため、「ドパガキ防止法」アプリの導入は <em>最終手段</em> としての位置づけとなります。\nDOPAGAKI防衛局は、<em>市民権剥奪手続きの開始</em> を検討する場合があります。",
-    shohou:"ドパガキ防止法アプリ + 強制プログラム (月額¥500、<em>絶対必須</em>)\n※ 科学的にはこの段階での介入効果は限定的ですが、<em>社会的責務</em> として導入を要請します。",
-    biko:"あなたの脳は、人類の脳機能崩壊の象徴として、<em>DOPAGAKI防衛局博物館への永久保存対象</em> に選定されました。\n※ 冷蔵保存は不可能な段階に到達しているため、<em>密閉容器での冷凍保管</em> を推奨します。\n※ 展示の際は、後世の警鐘として、お名前と侵食率を併記いたします。"}
+  {
+    lv: 0,
+    name: "NORMAL CITIZEN",
+    scoreMin: 0, scoreMax: 3,
+    percentMin: 0, percentMax: 10,
+    judgmentText: "あなたは本当に現代人ですか？　逆に心配です",
+    shareText: "あなたは本当に現代人ですか？　逆に心配です",
+    shoken: "あなたの脳から SNS 系の電波が全く検出されません　むしろ稀少すぎて測定不能です",
+    shochi: "そのまま生きていてください　社会的サンプルとして保護対象に指定します",
+    biko: "ドパガキ防衛局・希少種登録ファイルへ転送しました",
+    appCardText: "念のため、 ドパガキ防衛局公認アプリの存在だけ覚えておいてください"
+  },
+  {
+    lv: 1,
+    name: "WATCHED",
+    scoreMin: 4, scoreMax: 9,
+    percentMin: 11, percentMax: 30,
+    judgmentText: "あなたは現代技術と上手く共存できています.....観察対象リストに登録します",
+    shareText: "あなたは現代技術と上手く共存できています.....観察対象リストに登録します",
+    shoken: "軽い侵食はありますが　社会生活に支障はありません",
+    shochi: "スマホを置く時間を意識的に作りましょう　まだ間に合います",
+    biko: "6 ヶ月毎の経過観測対象リストに登録しました　お元気で",
+    appCardText: "まだ間に合います　予防的にダウンロードしておきましょう"
+  },
+  {
+    lv: 2,
+    name: "ALERT",
+    scoreMin: 10, scoreMax: 15,
+    percentMin: 31, percentMax: 50,
+    judgmentText: "あなたはドパガキになりつつあります... 警戒対象です",
+    shareText: "あなたはドパガキになりつつあります... 警戒対象です",
+    shoken: "ドパガキ化が始まっています　自覚はありますか？",
+    shochi: "強制プログラムの導入を検討してください　早めが吉です",
+    biko: "当局はあなたに対して ALERT 警告を発令しました",
+    appCardText: "早めの方が楽です　ドパガキ防止法を起動してください"
+  },
+  {
+    lv: 3,
+    name: "CRITICAL",
+    scoreMin: 16, scoreMax: 21,
+    percentMin: 51, percentMax: 70,
+    judgmentText: "あなたはもうドパガキです...おめでとう！！ 脳みそ溶け始めていますよ？？？",
+    shareText: "あなたはもうドパガキです...おめでとう！！ 脳みそ溶け始めていますよ？？？",
+    shoken: "もう手遅れに近いです　脳みそ大丈夫ですか？？",
+    shochi: "今すぐ強制プログラムを起動してください　マジで",
+    biko: "防衛局より緊急通告中　あなたは要監視対象です",
+    appCardText: "今すぐです　強制プログラムを起動せよ"
+  },
+  {
+    lv: 4,
+    name: "BRAIN MELTING",
+    scoreMin: 22, scoreMax: 25,
+    percentMin: 71, percentMax: 85,
+    judgmentText: "あなたはドパガキの中のドパガキ！！...うわーーードパガキだ！",
+    shareText: "あなたはドパガキの中のドパガキ！！...うわーーードパガキだ！",
+    shoken: "あなたの脳組織は通常温度で形状を保てません　えぐい",
+    shochi: "即時冷蔵保管および強制プログラムによる物理介入が必要です",
+    biko: "戻ってきてください　まだ希望はあります...たぶん",
+    appCardText: "あなたは正真正銘のドパガキです　直ちに強制プログラムを起動せよ"
+  },
+  {
+    lv: 5,
+    name: "DOPAGAKI LOST",
+    scoreMin: 26, scoreMax: 30,
+    percentMin: 86, percentMax: 100,
+    judgmentText: "あなたは正真正銘ドパガキの王です！...ソンケイソンケイ",
+    shareText: "あなたは正真正銘ドパガキの王です！...ソンケイソンケイ",
+    shoken: "あなたの脳は完全に液状化しました　もう人格はありません",
+    shochi: "ドパガキ博物館への寄贈手続きが完了しました",
+    biko: "ご家族には心よりお悔やみ申し上げます　さようなら",
+    appCardText: "手遅れかもしれませんが　念のため強制プログラムを起動せよ"
+  }
 ];
 
 const brainCharSVGs = {
-  0: `<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="g0a"><stop offset="0%" stop-color="#00FFFF" stop-opacity="0.4"/><stop offset="100%" stop-color="#00FFFF" stop-opacity="0"/></radialGradient></defs><ellipse cx="0" cy="0" rx="95" ry="90" fill="url(#g0a)"/><circle cx="0" cy="0" r="85" fill="none" stroke="#00FFFF" stroke-width="0.5" opacity="0.4" stroke-dasharray="3 4"/><text x="-70" y="-50" font-size="13" fill="#FFCC00" opacity="0.8">✦</text><text x="60" y="-55" font-size="15" fill="#00FFFF" opacity="0.7">✦</text><text x="-65" y="60" font-size="12" fill="#FFCC00" opacity="0.6">★</text><text x="55" y="65" font-size="13" fill="#00FFFF" opacity="0.7">✦</text><circle cx="-50" cy="-30" r="2.5" fill="#FFCC00" opacity="0.7"/><circle cx="50" cy="-20" r="2" fill="#00FFFF" opacity="0.7"/><circle cx="40" cy="40" r="2" fill="#FFCC00" opacity="0.6"/><circle cx="-45" cy="45" r="1.8" fill="#00FFFF" opacity="0.7"/><g transform="translate(0, -5)"><path d="M -50 -30 C -55 -50 -30 -60 -10 -55 C 0 -60 10 -60 25 -55 C 50 -50 55 -25 50 -10 C 60 0 55 25 40 35 C 30 50 0 50 -15 45 C -35 50 -55 40 -55 20 C -65 5 -60 -15 -50 -30 Z" fill="#00FFFF" opacity="0.85" stroke="#00AACC" stroke-width="1.5"/><circle cx="-18" cy="-8" r="9" fill="white" stroke="#003333" stroke-width="1"/><circle cx="-16" cy="-7" r="4" fill="#003333"/><circle cx="-15" cy="-9" r="1.5" fill="white"/><circle cx="18" cy="-8" r="9" fill="white" stroke="#003333" stroke-width="1"/><circle cx="20" cy="-7" r="4" fill="#003333"/><circle cx="21" cy="-9" r="1.5" fill="white"/><path d="M -12 15 Q 0 25 12 15" stroke="#003333" stroke-width="2.5" fill="none" stroke-linecap="round"/><ellipse cx="-30" cy="10" rx="6" ry="3" fill="#FF6688" opacity="0.5"/><ellipse cx="30" cy="10" rx="6" ry="3" fill="#FF6688" opacity="0.5"/></g></svg>`,
+  0: ``,
 
-  1: `<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="g1a"><stop offset="0%" stop-color="#FF3366" stop-opacity="0.3"/><stop offset="50%" stop-color="#00CCDD" stop-opacity="0.3"/><stop offset="100%" stop-color="#FF3366" stop-opacity="0"/></radialGradient></defs><ellipse cx="0" cy="0" rx="95" ry="90" fill="url(#g1a)"/><circle cx="0" cy="0" r="85" fill="none" stroke="#FF3366" stroke-width="0.5" opacity="0.4" stroke-dasharray="4 3"/><g transform="translate(-65, -45) scale(0.75)"><path d="M 0 -2 C -3 -8 -10 -8 -10 -2 C -10 4 0 12 0 12 C 0 12 10 4 10 -2 C 10 -8 3 -8 0 -2 Z" fill="#FF3366" stroke="#CC1133" stroke-width="0.7"/></g><g transform="translate(60, -50) scale(0.65)"><path d="M 0 -2 C -3 -8 -10 -8 -10 -2 C -10 4 0 12 0 12 C 0 12 10 4 10 -2 C 10 -8 3 -8 0 -2 Z" fill="#FF6699" stroke="#CC3366" stroke-width="0.6"/></g><g transform="translate(-70, 50) scale(0.6)"><rect x="-2" y="-6" width="3" height="9" fill="#FFCC00"/><path d="M 1 -6 C 1 -10 4 -12 6 -10 C 7 -8 6 -4 4 -4 L 1 -4 Z" fill="#FFCC00" stroke="#CC9900" stroke-width="0.5"/><rect x="-3.5" y="3" width="6" height="5" fill="#FFCC00" stroke="#CC9900" stroke-width="0.5"/></g><g transform="translate(65, 50) scale(0.6)"><path d="M 0 -8 C -5 -8 -7 -4 -6 0 L -8 4 L -3 3 C -1 5 4 5 6 0 C 8 -5 5 -8 0 -8 Z" fill="#FFCC00" stroke="#CC9900" stroke-width="0.6"/><path d="M -1 0 L 0 2 L 2 -2" stroke="#996600" stroke-width="0.8" fill="none" stroke-linecap="round"/></g><g transform="translate(0, -15)"><path d="M -50 -30 C -55 -50 -30 -60 -10 -55 C 0 -60 10 -60 25 -55 C 50 -50 55 -25 50 -10 C 60 0 55 25 40 35 C 30 50 0 50 -15 45 C -35 50 -55 40 -55 20 C -65 5 -60 -15 -50 -30 Z" fill="#00CCDD" opacity="0.85" stroke="#0088AA" stroke-width="1.5"/><circle cx="-18" cy="-8" r="9" fill="white" stroke="#003333" stroke-width="1"/><circle cx="-13" cy="-7" r="4" fill="#003333"/><circle cx="18" cy="-8" r="9" fill="white" stroke="#003333" stroke-width="1"/><circle cx="13" cy="-7" r="4" fill="#003333"/><path d="M -12 20 Q 0 13 12 20" stroke="#003333" stroke-width="2" fill="none" stroke-linecap="round"/></g><g transform="translate(-5, 55) rotate(-12)"><rect x="-13" y="-19" width="26" height="38" rx="3" fill="#1a1a2e" stroke="#3a3a5a" stroke-width="0.8"/><circle cx="0" cy="-13" r="2.8" fill="#0a0a14" stroke="#3a3a5a" stroke-width="0.5"/><circle cx="0" cy="-13" r="0.7" fill="#FF00FF" opacity="0.6"/></g></svg>`,
+  1: ``,
 
-  2: `<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="g2a"><stop offset="0%" stop-color="#FFCC00" stop-opacity="0.5"/><stop offset="60%" stop-color="#FF3344" stop-opacity="0.3"/><stop offset="100%" stop-color="#FFCC00" stop-opacity="0"/></radialGradient></defs><ellipse cx="0" cy="0" rx="95" ry="90" fill="url(#g2a)"/><circle cx="0" cy="0" r="85" fill="none" stroke="#FFCC00" stroke-width="0.5" opacity="0.5" stroke-dasharray="5 3"/><circle cx="0" cy="0" r="70" fill="none" stroke="#FF3344" stroke-width="0.6" opacity="0.4"/><path d="M -65 -10 Q -68 0 -62 4 L -62 -6 Z" fill="#00AAFF" opacity="0.8"/><path d="M 65 -10 Q 68 0 62 4 L 62 -6 Z" fill="#00AAFF" opacity="0.8"/><text x="-58" y="-50" font-size="13" fill="#FFCC00" opacity="0.7" font-weight="bold">!</text><text x="50" y="-55" font-size="14" fill="#FF3344" opacity="0.7" font-weight="bold">!</text><g transform="translate(0, -55)"><polygon points="0,-13 -12,8 12,8" fill="#FF3344" stroke="#660000" stroke-width="1.3"/><text y="5" font-size="14" text-anchor="middle" font-weight="900" fill="white">!</text></g><g transform="translate(0, -15)"><path d="M -50 -30 C -55 -50 -30 -60 -10 -55 C 0 -60 10 -60 25 -55 C 50 -50 55 -25 50 -10 C 60 0 55 25 40 35 C 30 50 0 50 -15 45 C -35 50 -55 40 -55 20 C -65 5 -60 -15 -50 -30 Z" fill="#FFCC00" opacity="0.9" stroke="#CC8800" stroke-width="1.5"/><circle cx="-18" cy="-8" r="11" fill="white" stroke="#660000" stroke-width="1.5"/><circle cx="-18" cy="-8" r="3" fill="#660000"/><circle cx="18" cy="-8" r="11" fill="white" stroke="#660000" stroke-width="1.5"/><circle cx="18" cy="-8" r="3" fill="#660000"/><ellipse cx="0" cy="22" rx="9" ry="7" fill="#660000"/></g><g transform="translate(-5, 55) rotate(-8)"><rect x="-13" y="-19" width="26" height="38" rx="3" fill="#1a1a2e" stroke="#3a3a5a" stroke-width="0.8"/><circle cx="0" cy="-13" r="2.8" fill="#0a0a14" stroke="#FF3344" stroke-width="0.5"/><circle cx="0" cy="-13" r="0.7" fill="#FF3344"/></g></svg>`,
+  2: ``,
 
-  3: `<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="g3a"><stop offset="0%" stop-color="#FF6644" stop-opacity="0.5"/><stop offset="60%" stop-color="#FF3344" stop-opacity="0.3"/><stop offset="100%" stop-color="#FF6644" stop-opacity="0"/></radialGradient><filter id="g3w" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="turbulence" baseFrequency="0.06" numOctaves="2" seed="3" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="5"/><feGaussianBlur stdDeviation="0.8"/></filter></defs><ellipse cx="0" cy="0" rx="95" ry="90" fill="url(#g3a)"/><circle cx="0" cy="0" r="85" fill="none" stroke="#FF6644" stroke-width="0.5" opacity="0.5" stroke-dasharray="2 4"/><circle cx="0" cy="0" r="70" fill="none" stroke="#FF3344" stroke-width="0.4" opacity="0.5"/><g opacity="0.5"><line x1="-75" y1="-30" x2="-60" y2="-25" stroke="#FF3344" stroke-width="1.5" stroke-linecap="round"/><line x1="70" y1="-25" x2="55" y2="-20" stroke="#FF3344" stroke-width="1.5" stroke-linecap="round"/><line x1="-73" y1="30" x2="-60" y2="35" stroke="#FF3344" stroke-width="1.2" stroke-linecap="round"/></g><g transform="translate(0, -15)" filter="url(#g3w)"><path d="M -50 -30 C -55 -50 -30 -60 -10 -55 C 0 -60 10 -60 25 -55 C 50 -50 55 -25 50 -10 C 60 0 55 25 40 35 C 30 50 0 50 -15 45 C -35 50 -55 40 -55 20 C -65 5 -60 -15 -50 -30 Z" fill="#FF6644" opacity="0.88" stroke="#CC3322" stroke-width="1.5"/><path d="M -15 -50 Q -8 -25 -12 0 Q -5 20 -2 40" stroke="#FF3344" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.7"/><circle cx="-18" cy="-5" r="11" fill="white" stroke="#440000" stroke-width="1.2"/><circle cx="-22" cy="-2" r="3" fill="#440000"/><circle cx="-21" cy="-3" r="1" fill="white"/><circle cx="18" cy="-5" r="11" fill="white" stroke="#440000" stroke-width="1.2"/><circle cx="22" cy="-2" r="3" fill="#440000"/><circle cx="23" cy="-3" r="1" fill="white"/><ellipse cx="0" cy="22" rx="11" ry="8" fill="#440000" opacity="0.9"/></g><g transform="translate(-8, 55) rotate(-10)"><rect x="-13" y="-19" width="26" height="38" rx="4" fill="#1a1a2e" stroke="#3a3a5a" stroke-width="0.8"/><circle cx="0" cy="-13" r="2.8" fill="#0a0a14" stroke="#FF6644" stroke-width="0.5"/><circle cx="0" cy="-13" r="0.7" fill="#FF6644"/></g></svg>`,
+  3: ``,
 
-  4: `<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="g4a"><stop offset="0%" stop-color="#FF00FF" stop-opacity="0.6"/><stop offset="50%" stop-color="#00CCFF" stop-opacity="0.4"/><stop offset="100%" stop-color="#FF00FF" stop-opacity="0"/></radialGradient><filter id="g4w" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="turbulence" baseFrequency="0.045" numOctaves="2" seed="5" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="10"/><feGaussianBlur stdDeviation="1.5"/></filter></defs><ellipse cx="0" cy="0" rx="95" ry="92" fill="url(#g4a)"/><circle cx="0" cy="0" r="88" fill="none" stroke="#FF00FF" stroke-width="0.5" opacity="0.5" stroke-dasharray="5 3"/><circle cx="0" cy="0" r="72" fill="none" stroke="#00FFFF" stroke-width="0.4" opacity="0.5"/><path d="M -80 -20 Q -70 -15 -60 -25" stroke="#00FFFF" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M 65 -25 Q 75 -18 85 -28" stroke="#FF00FF" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.6"/><text x="-85" y="0" font-size="14" fill="#FF00FF" opacity="0.4">∼</text><text x="75" y="12" font-size="16" fill="#00FFFF" opacity="0.4">∼</text><g transform="translate(0, -15)" filter="url(#g4w)"><g transform="translate(-3, 2)" opacity="0.45"><path d="M -50 -30 C -55 -50 -30 -60 -10 -55 C 0 -60 10 -60 25 -55 C 50 -50 58 -25 52 -10 C 65 5 60 30 45 45 C 40 65 28 75 18 80 C 10 70 -2 88 -12 78 C -25 75 -38 65 -48 50 C -68 30 -68 10 -55 0 C -65 -15 -60 -30 -50 -30 Z" fill="#FF00FF"/></g><g transform="translate(3, -2)" opacity="0.4"><path d="M -50 -30 C -55 -50 -30 -60 -10 -55 C 0 -60 10 -60 25 -55 C 50 -50 58 -25 52 -10 C 65 5 60 30 45 45 C 40 65 28 75 18 80 C 10 70 -2 88 -12 78 C -25 75 -38 65 -48 50 C -68 30 -68 10 -55 0 C -65 -15 -60 -30 -50 -30 Z" fill="#00CCFF"/></g><path d="M -50 -30 C -55 -50 -30 -60 -10 -55 C 0 -60 10 -60 25 -55 C 50 -50 58 -25 52 -10 C 65 5 60 30 45 45 C 40 65 28 75 18 80 C 10 70 -2 88 -12 78 C -25 75 -38 65 -48 50 C -68 30 -68 10 -55 0 C -65 -15 -60 -30 -50 -30 Z" fill="#00CCFF" opacity="0.85" stroke="#FF00FF" stroke-width="1.5"/><path d="M -32 60 Q -35 78 -30 82 L -30 65 Z" fill="#00CCFF"/><circle cx="-30" cy="90" r="3" fill="#00CCFF" opacity="0.7"/><path d="M 25 65 Q 28 82 33 85 L 33 70 Z" fill="#FF00FF" opacity="0.7"/><circle cx="31" cy="93" r="2.5" fill="#FF00FF" opacity="0.6"/><ellipse cx="-18" cy="-3" rx="10" ry="7" fill="white" stroke="#330066" stroke-width="1"/><circle cx="-18" cy="0" r="3" fill="#330066"/><ellipse cx="18" cy="-3" rx="10" ry="7" fill="white" stroke="#330066" stroke-width="1"/><circle cx="18" cy="0" r="3" fill="#330066"/><ellipse cx="0" cy="24" rx="13" ry="9" fill="#330066"/><path d="M 6 30 L 7 46 L 10 30 Z" fill="#00CCFF" opacity="0.8"/><circle cx="8" cy="50" r="2" fill="#00CCFF" opacity="0.6"/></g><g transform="translate(-10, 60) rotate(-12)"><rect x="-13" y="-19" width="26" height="38" rx="4" fill="#1a1a2e" stroke="#3a3a5a" stroke-width="0.8"/><circle cx="0" cy="-13" r="2.8" fill="#0a0a14" stroke="#FF00FF" stroke-width="0.5"/><circle cx="0" cy="-13" r="0.7" fill="#FF00FF"/></g></svg>`,
+  4: ``,
 
-  5: `<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><radialGradient id="g5a"><stop offset="0%" stop-color="#FF00FF" stop-opacity="0.7"/><stop offset="25%" stop-color="#FFCC00" stop-opacity="0.5"/><stop offset="50%" stop-color="#00FFFF" stop-opacity="0.5"/><stop offset="75%" stop-color="#00FF88" stop-opacity="0.4"/><stop offset="100%" stop-color="#FF3344" stop-opacity="0"/></radialGradient><linearGradient id="g5r" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF00FF"/><stop offset="25%" stop-color="#00FFFF"/><stop offset="50%" stop-color="#00FF88"/><stop offset="75%" stop-color="#FFCC00"/><stop offset="100%" stop-color="#FF3344"/></linearGradient><filter id="g5w" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="turbulence" baseFrequency="0.035" numOctaves="2" seed="7" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="16"/><feGaussianBlur stdDeviation="2"/></filter></defs><ellipse cx="0" cy="0" rx="98" ry="92" fill="url(#g5a)"/><circle cx="0" cy="0" r="88" fill="none" stroke="#FF00FF" stroke-width="0.6" opacity="0.5" stroke-dasharray="3 3"/><circle cx="0" cy="0" r="72" fill="none" stroke="#00FFFF" stroke-width="0.5" opacity="0.5"/><circle cx="0" cy="0" r="58" fill="none" stroke="#FFCC00" stroke-width="0.4" opacity="0.5" stroke-dasharray="2 2"/><text x="-72" y="-50" font-size="14" fill="#FFCC00">★</text><text x="62" y="-55" font-size="13" fill="#FF00FF">★</text><text x="-72" y="55" font-size="12" fill="#00FFFF">★</text><text x="62" y="60" font-size="15" fill="#FFCC00">✦</text><text x="-90" y="0" font-size="14" fill="#FF3344">♡</text><text x="72" y="15" font-size="12" fill="#FF00FF">♡</text><g transform="translate(0, -15)" filter="url(#g5w)"><g transform="translate(-5, 3)" opacity="0.5"><path d="M -45 -25 C -55 -45 -28 -55 -3 -50 C 5 -60 22 -50 32 -55 C 52 -45 60 -20 45 -5 C 60 8 50 30 30 38 C 27 52 -2 58 -18 42 C -45 52 -55 30 -50 15 C -65 0 -55 -15 -45 -25 Z" fill="#FF00FF"/></g><g transform="translate(5, -3)" opacity="0.5"><path d="M -45 -25 C -55 -45 -28 -55 -3 -50 C 5 -60 22 -50 32 -55 C 52 -45 60 -20 45 -5 C 60 8 50 30 30 38 C 27 52 -2 58 -18 42 C -45 52 -55 30 -50 15 C -65 0 -55 -15 -45 -25 Z" fill="#00FFFF"/></g><path d="M -45 -25 C -55 -45 -28 -55 -3 -50 C 5 -60 22 -50 32 -55 C 52 -45 60 -20 45 -5 C 60 8 50 30 30 38 C 27 52 -2 58 -18 42 C -45 52 -55 30 -50 15 C -65 0 -55 -15 -45 -25 Z" fill="url(#g5r)" opacity="0.85" stroke="#FF00FF" stroke-width="1.5"/><circle cx="-18" cy="-8" r="10" fill="white" stroke="#660066" stroke-width="1"/><path d="M -18 -8 m 0 -6 a 6 6 0 1 1 0.1 0 m -0.05 -2 a 4 4 0 1 0 -0.05 0 m 0 -1.5 a 2 2 0 1 1 0.05 0" stroke="#660066" stroke-width="1.8" fill="none"/><circle cx="18" cy="-8" r="10" fill="white" stroke="#660066" stroke-width="1"/><path d="M 18 -8 m 0 -6 a 6 6 0 1 1 0.1 0 m -0.05 -2 a 4 4 0 1 0 -0.05 0 m 0 -1.5 a 2 2 0 1 1 0.05 0" stroke="#660066" stroke-width="1.8" fill="none"/><path d="M -20 15 Q 0 38 20 15 Q 15 36 -10 36 Z" fill="#660066" stroke="#330033" stroke-width="1"/><path d="M 0 32 Q 7 46 0 54 Q -7 46 0 32 Z" fill="#FF6699"/><path d="M -15 32 Q -18 46 -15 52" stroke="#00FFFF" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="-15" cy="56" r="2" fill="#00FFFF"/><text x="0" y="-55" font-size="22" text-anchor="middle" fill="#FF00FF" font-weight="900">∞</text></g><g transform="translate(-10, 60) rotate(-15)"><rect x="-13" y="-19" width="26" height="38" rx="4" fill="#1a1a2e" stroke="url(#g5r)" stroke-width="1"/><circle cx="0" cy="-13" r="2.8" fill="#0a0a14" stroke="url(#g5r)" stroke-width="0.6"/><circle cx="0" cy="-13" r="0.7" fill="#FFCC00"/></g></svg>`
+  5: ``
 };
 let totalScore = 0;
 let currentResult = null;
@@ -1096,18 +1634,40 @@ function showResult() {
   const pc = calcPercent(totalScore, lv);
   currentResult = { score: totalScore, level: lv, percent: pc };
 
+  // 動画切り替え
+  const video = document.getElementById('result-video');
+  const container = document.getElementById('result-video-container');
+  if (video) {
+    video.src = 'assets/videos/mrdp_lv' + lv.lv + '.mp4';
+    if (lv.lv >= 1) {
+      video.poster = 'assets/mrdp_lv' + lv.lv + '.png';
+    }
+    video.load();
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {});
+    }
+  }
+  if (container) {
+    container.classList.remove('lv5-warp');
+    if (lv.lv === 5) container.classList.add('lv5-warp');
+  }
+
+  // テキスト更新
   document.getElementById('result-doc-num').textContent = generateDocNumber();
   document.getElementById('result-date').textContent = formatDate(new Date());
   document.getElementById('result-subject-id').textContent = generateSubjectId();
   document.getElementById('result-lv').textContent = 'DOPAGAKI ALERT LV.' + lv.lv;
   document.getElementById('result-name').textContent = '"' + lv.name + '"';
-  document.getElementById('result-char-box').innerHTML = brainCharSVGs[lv.lv] || '';
+  document.getElementById('result-judgment-text').textContent = lv.judgmentText;
   document.getElementById('result-percent').textContent = pc + '%';
   document.getElementById('result-score').textContent = totalScore + ' / 30';
   document.getElementById('result-shoken').innerHTML = lv.shoken;
   document.getElementById('result-shochi').innerHTML = lv.shochi;
-  document.getElementById('result-shohou').innerHTML = lv.shohou;
   document.getElementById('result-biko').innerHTML = lv.biko;
+
+  // アプリ誘導カード
+  document.getElementById('app-cta-text').textContent = lv.appCardText;
 
   try {
     const url = new URL(window.location.href);
@@ -1117,6 +1677,25 @@ function showResult() {
   } catch (e) {}
 
   showScreen('screen-result');
+
+  // 結果画面に lv-N クラスを設定 (テーマ崩れ演出)
+  const resultScreen = document.getElementById('screen-result');
+  if (resultScreen) {
+    resultScreen.className = resultScreen.className.replace(/\blv-\d+\b/g, '').trim();
+    resultScreen.classList.add('lv-' + lv.lv);
+  }
+
+  // CTA オーバーレイを 8 秒後にフェードイン + LV テーマカラー反映
+  clearTimeout(window._ctaOverlayTimer);
+  const ctaOverlay = document.getElementById('cta-overlay');
+  if (ctaOverlay) {
+    ctaOverlay.classList.remove('visible');
+    ctaOverlay.className = ctaOverlay.className.replace(/\blv-\d+\b/g, '').trim();
+    ctaOverlay.classList.add('lv-' + lv.lv);
+    window._ctaOverlayTimer = setTimeout(() => {
+      ctaOverlay.classList.add('visible');
+    }, 5000);
+  }
 }
 
 function shareToX() {
@@ -1125,11 +1704,27 @@ function shareToX() {
   const url = new URL(window.location.origin + window.location.pathname);
   url.searchParams.set('score', currentResult.score);
   url.searchParams.set('lv', lv.lv);
-  const text = lv.shareText + '\n脳侵食率 ' + currentResult.percent + '% (' + lv.name + ')\n#DOPAGAKI診断 #ドパガキ防止法\n' + url.toString();
-  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  const tweetText =
+    '【DOPAGAKI 通告書】\n' +
+    lv.shareText + '\n\n' +
+    '脳侵食率 ' + currentResult.percent + '%';
+  const hashtags = 'ドパガキ通告,DOPAGAKI診断,ドパガキ防止法';
+  const intentUrl = 'https://twitter.com/intent/tweet'
+    + '?text=' + encodeURIComponent(tweetText)
+    + '&url=' + encodeURIComponent(url.toString())
+    + '&hashtags=' + encodeURIComponent(hashtags);
+  window.open(intentUrl, '_blank', 'noopener,noreferrer');
 }
 
 function restart() {
+  // CTA オーバーレイを閉じる + LV クラス除去 + タイマー解除
+  const ctaOverlay = document.getElementById('cta-overlay');
+  if (ctaOverlay) {
+    ctaOverlay.classList.remove('visible');
+    ctaOverlay.className = ctaOverlay.className.replace(/\blv-\d+\b/g, '').trim();
+  }
+  clearTimeout(window._ctaOverlayTimer);
+
   try {
     const url = new URL(window.location.href);
     url.searchParams.delete('score');
@@ -1140,6 +1735,14 @@ function restart() {
   totalScore = 0;
   currentResult = null;
   showScreen('screen-top');
+}
+
+function closeCTAOverlay() {
+  const overlay = document.getElementById('cta-overlay');
+  if (overlay) {
+    overlay.classList.remove('visible');
+  }
+  clearTimeout(window._ctaOverlayTimer);
 }
 
 function loadFromURLParams() {
@@ -1164,6 +1767,23 @@ window.addEventListener('DOMContentLoaded', () => {
   if (!loadFromURLParams()) showScreen('screen-top');
 });
 </script>
+
+<!-- CTA オーバーレイ (結果表示 8 秒後にフェードイン) -->
+<div class="cta-overlay" id="cta-overlay">
+  <div class="cta-overlay-content">
+    <button class="cta-overlay-close" onclick="closeCTAOverlay()" aria-label="閉じる">×</button>
+    <div class="app-cta-card" id="app-cta-card">
+      <div class="app-cta-text" id="app-cta-text"></div>
+      <a href="https://play.google.com/store/apps/details?id=com.dopagaki.app"
+         target="_blank" rel="noopener"
+         class="app-cta-button">▼ ドパガキ防止法をダウンロード</a>
+    </div>
+    <button class="x-share-btn" id="x-share-btn" onclick="shareToX()">
+      <span class="x-share-icon">𝕏</span>
+      <span class="x-share-label">ドパガキ通告書を共有する</span>
+    </button>
+  </div>
+</div>
 
 </body>
 </html>
