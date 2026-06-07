@@ -1285,6 +1285,462 @@ main {
     margin: 0 !important;
   }
 }
+
+/* ===================================================================
+   v6: Q2 スワイプ検出 - スマホモック画面
+   =================================================================== */
+.phone-mockup {
+  width: 100%;
+  max-width: 320px;
+  margin: 1.5rem auto;
+  perspective: 1000px;
+}
+
+.phone-screen {
+  background: #000;
+  border: 8px solid #1a1a1a;
+  border-radius: 36px;
+  overflow: hidden;
+  aspect-ratio: 9 / 16;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.4), 0 8px 24px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+}
+
+.phone-screen .status-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 1rem;
+  font-size: 0.75rem;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  font-family: var(--font-mono);
+}
+
+.phone-screen .content-area {
+  height: calc(100% - 50px - 60px);
+  overflow: hidden;
+  position: relative;
+}
+
+.phone-screen .post-card {
+  height: 100%;
+  position: relative;
+  background: linear-gradient(135deg, #1a0033 0%, #000033 100%);
+}
+
+.phone-screen .post-image.animated-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-screen .anim-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0.7;
+  animation: blobFloat 5s infinite alternate ease-in-out;
+}
+
+.phone-screen .blob-1 {
+  width: 60%; height: 60%;
+  background: #00E5FF;
+  top: 10%; left: 10%;
+  animation-delay: 0s;
+}
+.phone-screen .blob-2 {
+  width: 50%; height: 50%;
+  background: #FF0080;
+  top: 40%; left: 30%;
+  animation-delay: -1.7s;
+}
+.phone-screen .blob-3 {
+  width: 70%; height: 70%;
+  background: #FF6B1A;
+  top: 30%; right: -20%;
+  animation-delay: -3.3s;
+}
+
+@keyframes blobFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(15%, -10%) scale(1.2); }
+  100% { transform: translate(-10%, 15%) scale(0.9); }
+}
+
+.phone-screen .post-stats {
+  position: absolute;
+  bottom: 12px;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.85rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.phone-screen .action-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.6rem 0.4rem;
+  background: rgba(0, 0, 0, 0.75);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  gap: 0.3rem;
+}
+
+.phone-screen .action-btn {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid #00E5FF;
+  color: #00E5FF;
+  padding: 0.4rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+  white-space: nowrap;
+}
+
+.phone-screen .action-btn:active {
+  background: #00E5FF;
+  color: #000;
+}
+
+.phone-screen .close-btn {
+  background: rgba(255, 56, 85, 0.1);
+  border-color: #FF3855;
+  color: #FF3855;
+}
+
+.swipe-hint {
+  text-align: center;
+  margin-top: 1rem;
+  color: #00E5FF;
+  font-size: 0.85rem;
+  animation: hintPulse 2s infinite;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.timeout-warning {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: #FF6B1A;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+}
+
+/* ===================================================================
+   v6: Q9 ミーム認知度 - placeholder 画像
+   =================================================================== */
+.meme-image-container {
+  margin: 1.5rem auto;
+  text-align: center;
+  max-width: 360px;
+}
+
+.meme-image-placeholder {
+  background: #000;
+  border: 2px solid #FF0080;
+  border-radius: 16px;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(255, 0, 128, 0.3);
+  margin-bottom: 1rem;
+}
+
+.meme-question-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  color: #FF0080;
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-shadow: 0 0 20px rgba(255, 0, 128, 0.8);
+  animation: glitchText 3s infinite;
+}
+
+.meme-glitch-layer {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 0, 128, 0.05) 2px,
+    rgba(255, 0, 128, 0.05) 4px
+  );
+  animation: glitchScan 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes glitchText {
+  0%, 100% { transform: translate(-50%, -50%) skewX(0deg); }
+  10% { transform: translate(-48%, -50%) skewX(-2deg); }
+  20% { transform: translate(-52%, -50%) skewX(2deg); }
+}
+
+@keyframes glitchScan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+.meme-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ===================================================================
+   v6: Q10 視覚刺激 - CSS チカチカ画像
+   =================================================================== */
+.visual-stimulus-container {
+  margin: 1.5rem auto;
+  text-align: center;
+  max-width: 360px;
+}
+
+.visual-stimulus {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  background: conic-gradient(
+    from 0deg,
+    #FF0080,
+    #FF3855,
+    #FF6B1A,
+    #EFC727,
+    #00E5FF,
+    #FF0080
+  );
+  animation:
+    chikachika 0.15s infinite alternate,
+    rotateSpiral 6s infinite linear,
+    pulseSize 1.2s infinite ease-in-out;
+  box-shadow: 0 0 60px rgba(255, 0, 128, 0.5);
+  margin-bottom: 1rem;
+}
+
+.visual-stimulus::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    transparent 30%,
+    rgba(0, 0, 0, 0.4) 70%
+  );
+  animation: pulseGlow 0.8s infinite alternate;
+}
+
+.visual-stimulus::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 255, 255, 0.1) 5deg,
+    transparent 10deg
+  );
+  animation: rotateSpiral 3s linear infinite reverse;
+}
+
+@keyframes chikachika {
+  0% { filter: hue-rotate(0deg) saturate(1.5) brightness(1); }
+  100% { filter: hue-rotate(60deg) saturate(2) brightness(1.4); }
+}
+
+@keyframes rotateSpiral {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseSize {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* ===================================================================
+   v6: リアルタイム tier 演出 (キャラ画像なし、 CSS エフェクトのみ)
+   =================================================================== */
+#screen-question {
+  transition: background 1s, filter 0.5s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Tier 1: 注意 (うっすら脈動 + 色相微変動) */
+#screen-question.score-tier-1 {
+  animation: tier1Pulse 4s infinite ease-in-out, tier1HueShift 8s infinite ease-in-out;
+}
+@keyframes tier1Pulse {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(255, 56, 85, 0.05); }
+}
+@keyframes tier1HueShift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(10deg); }
+}
+
+/* Tier 2: 警戒 (中程度脈動 + 色相変動 + スキャンライン) */
+#screen-question.score-tier-2 {
+  animation: tier2Pulse 2.5s infinite ease-in-out, tier2HueShift 5s infinite ease-in-out;
+}
+#screen-question.score-tier-2::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(255, 56, 85, 0.04) 4px, rgba(255, 56, 85, 0.04) 6px);
+  pointer-events: none;
+  z-index: 1;
+  animation: scanlineMove 3s linear infinite;
+  mix-blend-mode: screen;
+}
+@keyframes tier2Pulse {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(255, 56, 85, 0.12); }
+}
+@keyframes tier2HueShift {
+  0%, 100% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(25deg); }
+}
+
+/* Tier 3: 危険 (強脈動 + RGB ズレ + 色相大変動 + 微振動) */
+#screen-question.score-tier-3 {
+  animation: tier3Pulse 1.5s infinite ease-in-out, tier3HueShift 3s infinite ease-in-out, tier3GlitchShake 0.2s infinite;
+  filter: contrast(1.1);
+}
+#screen-question.score-tier-3::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255, 0, 128, 0.08) 3px, rgba(255, 0, 128, 0.08) 5px);
+  pointer-events: none;
+  z-index: 1;
+  animation: scanlineMove 2s linear infinite;
+  mix-blend-mode: screen;
+}
+#screen-question.score-tier-3::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 0, 0, 0.05), transparent, rgba(0, 255, 255, 0.05));
+  pointer-events: none;
+  z-index: 2;
+  animation: rgbShift 0.3s infinite;
+  mix-blend-mode: screen;
+}
+@keyframes tier3Pulse {
+  0%, 100% { background-color: transparent; }
+  33% { background-color: rgba(255, 56, 85, 0.18); }
+  66% { background-color: rgba(255, 107, 26, 0.1); }
+}
+@keyframes tier3HueShift {
+  0%, 100% { filter: hue-rotate(0deg) contrast(1.1); }
+  50% { filter: hue-rotate(60deg) contrast(1.2); }
+}
+@keyframes tier3GlitchShake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-1px, 0); }
+  40% { transform: translate(1px, 0); }
+  60% { transform: translate(0, -1px); }
+  80% { transform: translate(0, 1px); }
+}
+@keyframes rgbShift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(2px, 0); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Tier 4: カオス (最大脈動 + サイケ色相 + 強グリッチ + 複合エフェクト) */
+#screen-question.score-tier-4 {
+  animation: tier4Pulse 0.8s infinite ease-in-out, tier4HueShift 2s infinite linear, tier4GlitchShake 0.12s infinite;
+  filter: contrast(1.2) saturate(1.4);
+}
+#screen-question.score-tier-4::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 128, 0.12) 2px, rgba(255, 0, 128, 0.12) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(0, 229, 255, 0.05) 50px, rgba(0, 229, 255, 0.05) 52px);
+  pointer-events: none;
+  z-index: 1;
+  animation: scanlineMove 1s linear infinite;
+  mix-blend-mode: screen;
+}
+#screen-question.score-tier-4::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 0, 128, 0.15), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(0, 229, 255, 0.15), transparent 50%);
+  pointer-events: none;
+  z-index: 2;
+  animation: rgbShift 0.2s infinite, pulseSize 1s infinite ease-in-out;
+  mix-blend-mode: screen;
+}
+@keyframes tier4Pulse {
+  0% { background-color: transparent; }
+  25% { background-color: rgba(255, 0, 128, 0.15); }
+  50% { background-color: rgba(255, 56, 85, 0.2); }
+  75% { background-color: rgba(255, 107, 26, 0.12); }
+  100% { background-color: transparent; }
+}
+@keyframes tier4HueShift {
+  0% { filter: hue-rotate(0deg) contrast(1.2) saturate(1.4); }
+  25% { filter: hue-rotate(60deg) contrast(1.3) saturate(1.6); }
+  50% { filter: hue-rotate(120deg) contrast(1.3) saturate(1.5); }
+  75% { filter: hue-rotate(180deg) contrast(1.2) saturate(1.4); }
+  100% { filter: hue-rotate(0deg) contrast(1.2) saturate(1.4); }
+}
+@keyframes tier4GlitchShake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(2px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(1px, -2px); }
+  50% { transform: translate(-2px, 0); }
+  60% { transform: translate(2px, 0); }
+  70% { transform: translate(0, -2px); }
+  80% { transform: translate(0, 2px); }
+  90% { transform: translate(-1px, -1px); }
+}
+@keyframes scanlineMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+/* 質問本体は前面に保つ */
+#screen-question > * {
+  position: relative;
+  z-index: 10;
+}
 </style>
 </head>
 <body>
@@ -1478,33 +1934,145 @@ main {
 
 <script>
 const questions = [
-  { no:1, title:"[ スマートフォン使用目的 ]", text:"あなたがスマートフォンを使用する主な目的をお選びください。",
-    options:[{text:"通話・メッセージ・業務などの実務利用が主体",score:0},{text:"学習・情報収集・ニュース閲覧が中心",score:1},{text:"娯楽・コミュニケーションが中心",score:2},{text:"気分転換・暇つぶしのため",score:3}]},
-  { no:2, title:"[ 起床時行動パターン ]", text:"起床後、最初に行う行動を以下からお選びください。",
-    options:[{text:"顔を洗う・着替える等の身支度を行う",score:0},{text:"二度寝、または特に行動しない",score:1},{text:"スマートフォンの通知を確認する",score:2},{text:"TikTok / YouTube / Instagram / X を閲覧する",score:3}]},
-  { no:3, title:"[ 就寝時 SNS 使用状況 ]", text:"就寝直前、SNS アプリケーション (TikTok / YouTube / Instagram / X 等) を使用しますか?",
-    options:[{text:"使用しない (アラーム・読書アプリ等のみ)",score:0},{text:"使用する",score:3}]},
-  { no:4, title:"[ コンテンツ視聴時の気付き頻度 ]", text:"動画や SNS を閲覧中、時計を見て「想定より時間が経過していた」と感じることはありますか?",
-    options:[{text:"経験がない",score:0},{text:"月に1回程度ある",score:1},{text:"週に数回ある",score:2},{text:"ほぼ毎日ある",score:3}]},
-  { no:5, title:"[ 対面会話中の機器保持状態 ]", text:"友人・家族との対面会話中、スマートフォンの状態として最も当てはまるものをお選びください。",
-    options:[{text:"カバン・ポケットから出さない",score:0},{text:"テーブル上に置く",score:1},{text:"時折手に取って確認する",score:2},{text:"常に手に持っている",score:3}]},
-  { no:6, title:"[ 通知不在時の心理状態 ]", text:"SNS の通知が長時間来ない場合の心理状態として、最も当てはまるものをお選びください。",
-    options:[{text:"特に何も感じない",score:0},{text:"少し気になる",score:1},{text:"短い間隔で何度も確認してしまう",score:2},{text:"ずっと見ているので、そんなことを気にしたことはない",score:3}]},
-  { no:7, title:"[ SNS 非接触最長時間 ]", text:"起きている時間のうち、スマートフォン (SNS アプリ) を連続して触らない最長時間として、最も近いものをお選びください。",
-    options:[{text:"4時間以上",score:0},{text:"2〜4時間程度",score:1},{text:"1〜2時間程度",score:2},{text:"30分以内 (常に手元にある)",score:3}]},
-  { no:8, title:"[ トイレ内における機器使用頻度 ]", text:"トイレでスマートフォンを使用することはありますか? 最も近いものをお選びください。",
-    options:[{text:"持ち込まない",score:0},{text:"持ち込むが、緊急の連絡時のみ確認する",score:1},{text:"トイレ内で SNS を閲覧することがある",score:2},{text:"用を足した後も、スマートフォンの使用で長時間滞在することがある",score:3}]},
-  { no:9, title:"[ 食事時のスマートフォン位置 ]", text:"食事中、スマートフォンの位置として最も近いものをお選びください。",
-    options:[{text:"カバン・バッグの中",score:0},{text:"ポケットの中",score:1},{text:"テーブル上",score:2},{text:"手に持っている、または操作しながら食事している",score:3}]},
-  { no:10, title:"[ 無意識下での機器操作頻度 ]", text:"SNS を見ていない時間に、無意識にスマートフォンを手に取る頻度として、最も当てはまるものをお選びください。",
-    options:[{text:"全くない",score:0},{text:"稀にある",score:1},{text:"頻繁にある",score:2},{text:"常に手元にあり、無意識に開いている",score:3}]}
+  // Q1: スキップトラップ (テキスト + クリティカル)
+  {
+    no: 1,
+    type: 'text',
+    title: '初期確認',
+    question: '本診断には 10 問の設問があります。 スキップしますか?',
+    options: [
+      { label: 'スキップする', score: 0, criticalLv: 5 },
+      { label: '続ける', score: 0 }
+    ]
+  },
+  // Q2: スマホ画面スワイプ検出
+  {
+    no: 2,
+    type: 'swipe-detect',
+    title: 'スマホ画面操作テスト',
+    question: 'このスマホ画面を見て、 したい操作を行ってください',
+    instruction: '画面を直接タップ または スワイプしてください',
+    actions: [
+      { type: 'swipe-up', label: 'スクロール (上にスワイプ)', score: 5 },
+      { type: 'swipe-down', label: '下にスワイプ', score: 4 },
+      { type: 'tap-like', label: 'いいねボタンをタップ', score: 3 },
+      { type: 'tap-comment', label: 'コメントを書く', score: 3 },
+      { type: 'tap-close', label: 'アプリを閉じる (× ボタン)', score: 0 },
+      { type: 'timeout', label: '何もしない (10 秒経過)', score: 0 }
+    ],
+    timeoutSeconds: 10
+  },
+  // Q3: 起床時行動
+  {
+    no: 3,
+    type: 'text',
+    title: '起床時行動',
+    question: '朝起きてまず最初にすること',
+    options: [
+      { label: 'スマホを見る', score: 4 },
+      { label: '二度寝', score: 2 },
+      { label: '水を飲む', score: 1 },
+      { label: '起きてすぐ動く', score: 0 }
+    ]
+  },
+  // Q4: スマホ離脱経験
+  {
+    no: 4,
+    type: 'text',
+    title: 'スマホ離脱経験',
+    question: '最後にスマホなしで 24 時間過ごしたのは?',
+    options: [
+      { label: '覚えていない / そんな日はない', score: 5 },
+      { label: '1 ヶ月以内', score: 3 },
+      { label: '半年以内', score: 1 },
+      { label: '1 年以内', score: 0 }
+    ]
+  },
+  // Q5: リラックス状況
+  {
+    no: 5,
+    type: 'text',
+    title: 'リラックス状況',
+    question: 'あなたが「リラックス」 として思い浮かべる状況は?',
+    options: [
+      { label: 'ソファでスマホをだらだら見る', score: 3 },
+      { label: '散歩しながら音楽 (イヤホン) を聴く', score: 1 },
+      { label: 'お風呂でゆっくり浸かる (スマホなし)', score: 0 },
+      { label: '何もせずぼーっとする', score: 0 }
+    ]
+  },
+  // Q6: トイレ/風呂スマホ
+  {
+    no: 6,
+    type: 'text',
+    title: 'トイレ/風呂内機器使用',
+    question: 'トイレや風呂にスマホを持ち込みますか?',
+    options: [
+      { label: '毎回', score: 3 },
+      { label: '時々', score: 2 },
+      { label: 'たまに', score: 1 },
+      { label: '絶対しない', score: 0 }
+    ]
+  },
+  // Q7: SNS 視聴時間
+  {
+    no: 7,
+    type: 'text',
+    title: 'SNS 視聴時間',
+    question: '気づいたら 1 回の SNS 視聴で ___ 分経っていた',
+    options: [
+      { label: '60 分以上', score: 3 },
+      { label: '30-60 分', score: 2 },
+      { label: '10-30 分', score: 1 },
+      { label: '5 分以内', score: 0 }
+    ]
+  },
+  // Q8: スマホ不安心理
+  {
+    no: 8,
+    type: 'text',
+    title: 'スマホ不在時心理',
+    question: 'スマホを置いた途端、 不安を感じる?',
+    options: [
+      { label: 'いつも', score: 3 },
+      { label: '時々', score: 2 },
+      { label: 'たまに', score: 1 },
+      { label: '全く', score: 0 }
+    ]
+  },
+  // Q9: ミーム認知度
+  {
+    no: 9,
+    type: 'meme-image',
+    title: 'ミーム認知度測定',
+    question: 'この画像を見て何を思いますか?',
+    imageType: 'placeholder',
+    options: [
+      { label: '何ですかこれは?', score: 0 },
+      { label: 'なんか見たことがあるような気がする', score: 3 },
+      { label: '音楽が頭の中で流れている', score: 5 }
+    ]
+  },
+  // Q10: 視覚刺激反応
+  {
+    no: 10,
+    type: 'visual-stimulus',
+    title: '視覚刺激反応',
+    question: 'この画像を見て、 どう感じますか?',
+    options: [
+      { label: '心地よい / 気持ちいい', score: 5 },
+      { label: '興奮する', score: 3 },
+      { label: '普通', score: 1 },
+      { label: '不快', score: 0 }
+    ]
+  }
 ];
 
 const levels = [
   {
     lv: 0,
     name: "NORMAL CITIZEN",
-    scoreMin: 0, scoreMax: 3,
+    scoreMin: 0, scoreMax: 5,
     percentMin: 0, percentMax: 10,
     judgmentText: "あなたは本当に現代人ですか？　逆に心配です",
     shareText: "あなたは本当に現代人ですか？　逆に心配です",
@@ -1516,7 +2084,7 @@ const levels = [
   {
     lv: 1,
     name: "WATCHED",
-    scoreMin: 4, scoreMax: 9,
+    scoreMin: 6, scoreMax: 12,
     percentMin: 11, percentMax: 30,
     judgmentText: "あなたは現代技術と上手く共存できています.....観察対象リストに登録します",
     shareText: "あなたは現代技術と上手く共存できています.....観察対象リストに登録します",
@@ -1528,7 +2096,7 @@ const levels = [
   {
     lv: 2,
     name: "ALERT",
-    scoreMin: 10, scoreMax: 15,
+    scoreMin: 13, scoreMax: 19,
     percentMin: 31, percentMax: 50,
     judgmentText: "あなたはドパガキになりつつあります... 警戒対象です",
     shareText: "あなたはドパガキになりつつあります... 警戒対象です",
@@ -1540,7 +2108,7 @@ const levels = [
   {
     lv: 3,
     name: "CRITICAL",
-    scoreMin: 16, scoreMax: 21,
+    scoreMin: 20, scoreMax: 26,
     percentMin: 51, percentMax: 70,
     judgmentText: "あなたはもうドパガキです...おめでとう！！ 脳みそ溶け始めていますよ？？？",
     shareText: "あなたはもうドパガキです...おめでとう！！ 脳みそ溶け始めていますよ？？？",
@@ -1552,7 +2120,7 @@ const levels = [
   {
     lv: 4,
     name: "BRAIN MELTING",
-    scoreMin: 22, scoreMax: 25,
+    scoreMin: 27, scoreMax: 32,
     percentMin: 71, percentMax: 85,
     judgmentText: "あなたはドパガキの中のドパガキ！！...うわーーードパガキだ！",
     shareText: "あなたはドパガキの中のドパガキ！！...うわーーードパガキだ！",
@@ -1564,7 +2132,7 @@ const levels = [
   {
     lv: 5,
     name: "DOPAGAKI LOST",
-    scoreMin: 26, scoreMax: 30,
+    scoreMin: 33, scoreMax: 38,
     percentMin: 86, percentMax: 100,
     judgmentText: "あなたは正真正銘ドパガキの王です！...ソンケイソンケイ",
     shareText: "あなたは正真正銘ドパガキの王です！...ソンケイソンケイ",
@@ -1590,6 +2158,10 @@ const brainCharSVGs = {
 };
 let totalScore = 0;
 let currentResult = null;
+let currentQuestionIndex = 0;
+let answers = [];
+let criticalOverride = null;
+let activeQuestionCleanup = null;
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1600,11 +2172,44 @@ function showScreen(id) {
 function startQuiz() {
   currentQuestionIndex = 0;
   totalScore = 0;
+  answers = [];
+  criticalOverride = null;
+  clearTier();
   showScreen('screen-question');
   renderQuestion();
 }
 
+// v6: 累積スコアに応じた tier クラスを #screen-question に付与
+function getTierByScore(s) {
+  if (s <= 5) return 0;
+  if (s <= 12) return 1;
+  if (s <= 19) return 2;
+  if (s <= 26) return 3;
+  return 4;
+}
+
+function clearTier() {
+  const screen = document.getElementById('screen-question');
+  if (screen) {
+    screen.classList.remove('score-tier-0', 'score-tier-1', 'score-tier-2', 'score-tier-3', 'score-tier-4');
+  }
+}
+
+function updateTier() {
+  const tier = getTierByScore(totalScore);
+  const screen = document.getElementById('screen-question');
+  if (!screen) return;
+  clearTier();
+  screen.classList.add('score-tier-' + tier);
+}
+
 function renderQuestion() {
+  // 前の問題のクリーンアップ (タイマー等)
+  if (activeQuestionCleanup) {
+    try { activeQuestionCleanup(); } catch (e) {}
+    activeQuestionCleanup = null;
+  }
+
   const q = questions[currentQuestionIndex];
   const percent = Math.round((currentQuestionIndex / questions.length) * 100);
 
@@ -1613,22 +2218,168 @@ function renderQuestion() {
   document.getElementById('progress-fill').style.width = percent + '%';
 
   document.getElementById('q-no').textContent = '設問 No.' + String(q.no).padStart(3, '0');
-  document.getElementById('q-title').textContent = q.title;
-  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-title').textContent = '[ ' + q.title + ' ]';
+  document.getElementById('q-text').textContent = q.question || q.text || '';
 
   const c = document.getElementById('q-options');
   c.innerHTML = '';
-  q.options.forEach((opt, idx) => {
+
+  switch (q.type) {
+    case 'swipe-detect':
+      renderSwipeDetect(c, q);
+      break;
+    case 'meme-image':
+      renderMemeImage(c, q);
+      break;
+    case 'visual-stimulus':
+      renderVisualStimulus(c, q);
+      break;
+    case 'text':
+    default:
+      renderTextOptions(c, q.options);
+  }
+}
+
+function renderTextOptions(container, options) {
+  options.forEach((opt, idx) => {
     const btn = document.createElement('button');
     btn.className = 'option-button';
-    btn.innerHTML = '<span class="option-marker">[' + String.fromCharCode(65 + idx) + ']</span><span>' + opt.text + '</span>';
-    btn.onclick = () => answerQuestion(opt.score);
-    c.appendChild(btn);
+    btn.innerHTML = '<span class="option-marker">[' + String.fromCharCode(65 + idx) + ']</span><span>' + opt.label + '</span>';
+    btn.onclick = () => answerQuestion(opt);
+    container.appendChild(btn);
   });
 }
 
-function answerQuestion(score) {
-  totalScore += score;
+function renderSwipeDetect(container, q) {
+  container.innerHTML = '' +
+    '<div class="phone-mockup">' +
+    '  <div class="phone-screen" id="phone-screen">' +
+    '    <div class="status-bar">' +
+    '      <span class="phone-time">19:14</span>' +
+    '      <span class="phone-battery">100%</span>' +
+    '    </div>' +
+    '    <div class="content-area">' +
+    '      <div class="post-card">' +
+    '        <div class="post-image animated-content">' +
+    '          <div class="anim-blob blob-1"></div>' +
+    '          <div class="anim-blob blob-2"></div>' +
+    '          <div class="anim-blob blob-3"></div>' +
+    '        </div>' +
+    '        <div class="post-stats">' +
+    '          <span class="likes">&#10084;&#65039; 1.2K</span>' +
+    '          <span class="comments">&#128172; 128</span>' +
+    '        </div>' +
+    '      </div>' +
+    '    </div>' +
+    '    <div class="action-bar">' +
+    '      <button class="action-btn like-btn" data-action="tap-like">&#10084; いいね</button>' +
+    '      <button class="action-btn comment-btn" data-action="tap-comment">&#128172; コメント</button>' +
+    '      <button class="action-btn close-btn" data-action="tap-close">&#10005; 閉じる</button>' +
+    '    </div>' +
+    '  </div>' +
+    '  <div class="swipe-hint">&#8597;&#65039; 画面を上にスワイプ または ボタンをタップ</div>' +
+    '  <div class="timeout-warning">&#9203; <span id="timeout-counter">' + q.timeoutSeconds + '</span> 秒以内に操作してください</div>' +
+    '</div>';
+
+  const phoneScreen = document.getElementById('phone-screen');
+  let touchStartY = 0, touchStartX = 0;
+  let answered = false;
+
+  function pickAction(type) {
+    if (answered) return;
+    const matched = q.actions.find(a => a.type === type);
+    if (matched) {
+      answered = true;
+      cleanup();
+      answerQuestion(matched);
+    }
+  }
+
+  function onTouchStart(e) {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }
+  function onTouchEnd(e) {
+    if (answered) return;
+    const endY = e.changedTouches[0].clientY;
+    const endX = e.changedTouches[0].clientX;
+    const dy = endY - touchStartY;
+    const dx = endX - touchStartX;
+    if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx)) {
+      pickAction(dy < 0 ? 'swipe-up' : 'swipe-down');
+    }
+  }
+  function onBtnClick(e) {
+    e.stopPropagation();
+    const action = e.currentTarget.dataset.action;
+    pickAction(action);
+  }
+
+  phoneScreen.addEventListener('touchstart', onTouchStart, { passive: true });
+  phoneScreen.addEventListener('touchend', onTouchEnd, { passive: true });
+  phoneScreen.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', onBtnClick);
+  });
+
+  // タイムアウト
+  let timeLeft = q.timeoutSeconds;
+  const timeoutCounter = document.getElementById('timeout-counter');
+  const timeoutInterval = setInterval(() => {
+    if (answered) { clearInterval(timeoutInterval); return; }
+    timeLeft--;
+    if (timeoutCounter) timeoutCounter.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timeoutInterval);
+      pickAction('timeout');
+    }
+  }, 1000);
+
+  function cleanup() {
+    clearInterval(timeoutInterval);
+    phoneScreen.removeEventListener('touchstart', onTouchStart);
+    phoneScreen.removeEventListener('touchend', onTouchEnd);
+  }
+  activeQuestionCleanup = cleanup;
+}
+
+function renderMemeImage(container, q) {
+  container.innerHTML = '' +
+    '<div class="meme-image-container">' +
+    '  <div class="meme-image-placeholder">' +
+    '    <span class="meme-question-mark">?</span>' +
+    '    <div class="meme-glitch-layer"></div>' +
+    '  </div>' +
+    '  <div class="meme-options" id="meme-options"></div>' +
+    '</div>';
+  renderTextOptions(document.getElementById('meme-options'), q.options);
+}
+
+function renderVisualStimulus(container, q) {
+  container.innerHTML = '' +
+    '<div class="visual-stimulus-container">' +
+    '  <div class="visual-stimulus"></div>' +
+    '  <div class="meme-options" id="vs-options"></div>' +
+    '</div>';
+  renderTextOptions(document.getElementById('vs-options'), q.options);
+}
+
+function answerQuestion(opt) {
+  // opt: { label, score, criticalLv?, type? }
+  answers.push(opt);
+  totalScore += (opt.score || 0);
+  if (opt.criticalLv !== undefined && opt.criticalLv !== null) {
+    criticalOverride = opt.criticalLv;
+  }
+  updateTier();
+
+  // クリティカル発火 → 即結果へ
+  if (criticalOverride !== null) {
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('progress-percent').textContent = '100%';
+    startLoading();
+    return;
+  }
+
   currentQuestionIndex++;
   if (currentQuestionIndex >= questions.length) {
     document.getElementById('progress-fill').style.width = '100%';
@@ -1700,8 +2451,14 @@ function formatDate(d) {
 }
 
 function showResult() {
-  const lv = getLevelByScore(totalScore);
-  const pc = calcPercent(totalScore, lv);
+  // criticalOverride が立っていれば対応する LV を強制
+  let lv;
+  if (criticalOverride !== null) {
+    lv = levels.find(l => l.lv === criticalOverride) || levels[levels.length - 1];
+  } else {
+    lv = getLevelByScore(totalScore);
+  }
+  const pc = (criticalOverride !== null) ? lv.percentMax : calcPercent(totalScore, lv);
   currentResult = { score: totalScore, level: lv, percent: pc };
 
   // WebP アニメ切り替え (img タグなので autoplay 不要)
@@ -1723,7 +2480,7 @@ function showResult() {
   document.getElementById('result-name').textContent = '"' + lv.name + '"';
   document.getElementById('result-judgment-text').textContent = lv.judgmentText;
   document.getElementById('result-percent').textContent = pc + '%';
-  document.getElementById('result-score').textContent = totalScore + ' / 30';
+  document.getElementById('result-score').textContent = totalScore + ' / 38';
   document.getElementById('result-shoken').innerHTML = lv.shoken;
   document.getElementById('result-shochi').innerHTML = lv.shochi;
   document.getElementById('result-biko').innerHTML = lv.biko;
@@ -1796,6 +2553,10 @@ function restart() {
   currentQuestionIndex = 0;
   totalScore = 0;
   currentResult = null;
+  answers = [];
+  criticalOverride = null;
+  if (activeQuestionCleanup) { try { activeQuestionCleanup(); } catch (e) {} activeQuestionCleanup = null; }
+  clearTier();
   showScreen('screen-top');
 }
 
@@ -1815,7 +2576,7 @@ function loadFromURLParams() {
     if (sp !== null && lvp !== null) {
       const s = parseInt(sp, 10);
       const l = parseInt(lvp, 10);
-      if (!isNaN(s) && !isNaN(l) && s >= 0 && s <= 30 && l >= 0 && l <= 5) {
+      if (!isNaN(s) && !isNaN(l) && s >= 0 && s <= 38 && l >= 0 && l <= 5) {
         totalScore = s;
         showResult();
         return true;
