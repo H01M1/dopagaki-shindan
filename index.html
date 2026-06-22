@@ -164,9 +164,15 @@ main {
   font-weight: 900;
   color: var(--color-cyan);
   letter-spacing: 0.05em;
-  text-shadow: 0 0 10px var(--color-cyan), 0 0 20px var(--color-cyan);
+  text-shadow: 0 0 5px var(--color-cyan), 0 0 10px var(--color-cyan);
   margin: 1rem 0 0.5rem;
-  animation: glow-pulse 3s ease-in-out infinite;
+  animation: glow-pulse-top 3s ease-in-out infinite;
+}
+
+/* トップ画面タイトル専用の弱発光パルス (結果画面の glow-pulse には影響させない) */
+@keyframes glow-pulse-top {
+  0%, 100% { text-shadow: 0 0 2px currentColor, 0 0 4px currentColor; }
+  50% { text-shadow: 0 0 3px currentColor, 0 0 6px currentColor, 0 0 8px currentColor; }
 }
 
 .top-subtitle {
@@ -188,7 +194,7 @@ main {
 
 .top-main-catch .highlight {
   color: var(--color-red);
-  text-shadow: 0 0 8px var(--color-red);
+  text-shadow: 0 0 4px var(--color-red);
 }
 
 .top-sub-catch {
@@ -229,15 +235,15 @@ main {
   border: 2px solid var(--color-cyan);
   cursor: pointer;
   text-decoration: none;
-  text-shadow: 0 0 5px var(--color-cyan);
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.15), inset 0 0 10px rgba(0, 255, 255, 0.05);
+  text-shadow: 0 0 3px var(--color-cyan);
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.075), inset 0 0 5px rgba(0, 255, 255, 0.025);
   transition: all 0.3s ease;
   margin: 2rem 0;
 }
 
 .cta-button:hover {
   background: rgba(0, 255, 255, 0.1);
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 15px rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.15), inset 0 0 8px rgba(0, 255, 255, 0.05);
   transform: translateY(-2px);
 }
 
@@ -1786,7 +1792,7 @@ main {
     </div>
   </div>
 
-  <button class="cta-button" onclick="startQuiz()">[ 脳波解析を開始する → ]</button>
+  <button class="cta-button" onclick="startQuiz()">脳波解析を開始する</button>
 
   <div class="top-footer-notes">
     ※ 本診断は DOPAGAKI防衛局 脳波解析部と<br>
