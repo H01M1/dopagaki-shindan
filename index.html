@@ -353,7 +353,7 @@ main {
   position: relative;
   width: 100%;
   max-width: 400px;
-  height: 60vh;
+  height: 75vh;
   margin: 0 auto;
   background: #000;
   border: 1px solid rgba(0, 255, 255, 0.3);
@@ -398,13 +398,13 @@ main {
   color: #E8D24A;
   line-height: 2;
   will-change: transform;
-  transform: translateY(40%);
+  transform: translateY(0%);
 }
 .q1-scroll-text.running {
-  animation: q1ScrollUp 24s linear forwards;
+  animation: q1ScrollUp 50s linear forwards;
 }
 @keyframes q1ScrollUp {
-  from { transform: translateY(40%); }
+  from { transform: translateY(0%); }
   to { transform: translateY(-100%); }
 }
 .q1s-body {
@@ -2458,7 +2458,7 @@ function renderQ1Scroll() {
     if (answered) return;
     answered = true;
     const elapsed = (performance.now() - startTime) / 1000; // 秒
-    const score = elapsed < 5 ? 5 : elapsed < 15 ? 3 : elapsed < 25 ? 1 : 0;
+    const score = elapsed < 10 ? 5 : elapsed < 25 ? 3 : elapsed < 40 ? 1 : 0;
     cleanup();
     answerQuestion({ score, label: 'スキップ (' + Math.round(elapsed) + '秒)' });
   };
