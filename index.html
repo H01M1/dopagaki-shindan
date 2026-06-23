@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#000000">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#000000">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>DOPAGAKI ANALYSIS - ドパガキ防衛局 脳波解析部</title>
@@ -33,6 +35,14 @@
   font-family: 'Neuropol';
   src: url('./fonts/NEUROPOL.TTF') format('truetype');
   font-display: swap;
+}
+
+html {
+  color-scheme: dark;
+  background-color: #000;
+}
+body {
+  background-color: #000;
 }
 
 :root {
@@ -111,7 +121,7 @@ body::after {
   font-size: 1.1rem;
   color: var(--color-cyan);
   letter-spacing: 0.15em;
-  text-shadow: 0 0 5px var(--color-cyan);
+  text-shadow: none;
 }
 
 .site-subtitle {
