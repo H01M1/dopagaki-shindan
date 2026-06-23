@@ -347,56 +347,88 @@ main {
 .question-options { display: flex; flex-direction: column; gap: 0.8rem; }
 
 /* Q1 ローディング偽装 (スキップトラップ) */
-.q1-loading { text-align: center; margin-bottom: 1.5rem; }
-.q1-loading-head {
-  font-family: var(--font-mono);
-  color: var(--color-cyan);
-  letter-spacing: 0.18em;
-  font-size: 0.95rem;
-  margin-bottom: 0.6rem;
-}
-.q1-loading-status {
-  font-family: var(--font-jp);
-  color: var(--color-text);
-  font-size: 1.05rem;
-  margin-bottom: 0.8rem;
-}
-.q1-loading-bar {
-  height: 8px;
-  max-width: 360px;
-  margin: 0 auto 0.5rem;
-  background: rgba(0, 255, 255, 0.12);
-  border: 1px solid rgba(0, 255, 255, 0.35);
-  border-radius: 4px;
+/* Q1 YouTube 広告風スキップトラップ */
+.q1-ad-container { margin-bottom: 1.5rem; }
+.q1-ad-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 1px solid var(--color-cyan);
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
-.q1-loading-bar-fill {
-  height: 100%;
-  width: 87%;
-  background: linear-gradient(90deg, var(--color-cyan), var(--color-magenta));
-  box-shadow: 0 0 4px var(--color-cyan);
-  animation: q1BarPulse 1.6s ease-in-out infinite;
+.q1-ad-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--color-yellow);
+  color: #000;
+  font-family: var(--font-jp);
+  font-weight: 900;
+  font-size: 0.75rem;
+  padding: 2px 7px;
+  letter-spacing: 0.08em;
+  z-index: 2;
 }
-@keyframes q1BarPulse {
-  0%, 100% { width: 85%; opacity: 0.75; }
-  50% { width: 89%; opacity: 1; }
-}
-.q1-loading-pct {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+.q1-ad-text {
+  font-family: var(--font-jp);
+  font-weight: 900;
+  font-size: clamp(1.4rem, 6vw, 2.4rem);
   color: var(--color-cyan);
-  letter-spacing: 0.05em;
-  opacity: 0.85;
+  text-shadow: 0 0 6px var(--color-cyan);
+  text-align: center;
+  padding: 0 1rem;
+  animation: q1AdTextSwap 1s ease-in-out;
 }
-.q1-dots::after {
-  content: '';
-  animation: q1Dots 1.5s steps(1, end) infinite;
+@keyframes q1AdTextSwap {
+  0% { opacity: 0; transform: translateY(14px) scale(0.9); }
+  35% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
-@keyframes q1Dots {
-  0% { content: ''; }
-  25% { content: '.'; }
-  50% { content: '..'; }
-  75% { content: '...'; }
+.q1-ad-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  flex-wrap: wrap;
+}
+.q1-ad-skip-btn {
+  font-family: var(--font-jp);
+  font-size: 0.95rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-text-dim);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: not-allowed;
+  transition: all 0.2s ease;
+}
+.q1-ad-skip-btn.active {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.85);
+  border-color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.q1-ad-skip-btn.active:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.q1-ad-continue-btn {
+  font-family: var(--font-jp);
+  font-size: 0.9rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.q1-ad-continue-btn:hover {
+  background: rgba(0, 255, 255, 0.12);
 }
 
 .option-button {
@@ -1849,8 +1881,7 @@ main {
   <div class="top-subtitle">ドパガキ防衛局 脳波解析部</div>
 
   <div class="top-main-catch">
-    あなたの脳は、<br>
-    どれだけ<span class="highlight">侵食</span>されているか?
+    あなたの脳は<span class="highlight">溶けて</span>いますか?
   </div>
 
   <div class="top-sub-catch">
@@ -1894,12 +1925,16 @@ main {
   <div class="question-no" id="q-no">設問 No.001</div>
   <div class="question-title" id="q-title">[ 項目名 ]</div>
 
-  <!-- Q1 (index 0): ローディング画面の延長に偽装するスキップトラップ -->
-  <div class="q1-loading" id="q1-loading" style="display:none">
-    <div class="q1-loading-head">[ SYSTEM-INITIALIZE ]</div>
-    <div class="q1-loading-status">脳波解析モジュール起動中<span class="q1-dots"></span></div>
-    <div class="q1-loading-bar"><div class="q1-loading-bar-fill"></div></div>
-    <div class="q1-loading-pct">module loading: 87% — 認証確認待機中</div>
+  <!-- Q1 (index 0): YouTube 広告風スキップトラップ -->
+  <div class="q1-ad-container" id="q1-ad" style="display:none">
+    <div class="q1-ad-video">
+      <div class="q1-ad-label">広告</div>
+      <div class="q1-ad-text" id="q1-ad-text">ドパガキ防止法</div>
+    </div>
+    <div class="q1-ad-controls">
+      <button class="q1-ad-continue-btn" id="q1-ad-continue-btn" style="display:none">広告を最後まで視聴する ▼</button>
+      <button class="q1-ad-skip-btn" id="q1-ad-skip-btn" disabled>広告は <span id="q1-ad-count">5</span> 秒後にスキップ可能</button>
+    </div>
   </div>
 
   <div class="question-text" id="q-text">質問文がここに入ります</div>
@@ -2310,36 +2345,42 @@ function renderQuestion() {
   const progressEl = document.querySelector('#screen-question .question-progress');
   const qNoEl = document.getElementById('q-no');
   const qTitleEl = document.getElementById('q-title');
-  const q1LoadingEl = document.getElementById('q1-loading');
+  const qTextEl = document.getElementById('q-text');
+  const q1AdEl = document.getElementById('q1-ad');
 
   if (isIntro) {
-    // 問題インジケーター (進捗バー / No. / 項目名) を隠してローディング起動中に見せる
+    // 問題インジケーター (進捗バー / No. / 項目名 / 質問文 / 通常選択肢) を隠し YouTube 広告に偽装
     if (progressEl) progressEl.style.display = 'none';
     qNoEl.style.display = 'none';
     qTitleEl.style.display = 'none';
-    if (q1LoadingEl) q1LoadingEl.style.display = 'block';
-  } else {
-    // Q2 以降は通常の問題表示。表示番号は Q2 を No.001 とする (案 i)
-    if (progressEl) progressEl.style.display = '';
-    qNoEl.style.display = '';
-    qTitleEl.style.display = '';
-    if (q1LoadingEl) q1LoadingEl.style.display = 'none';
-
-    const shown = currentQuestionIndex;          // Q2(index1)→1 ... Q10(index9)→9
-    const total = questions.length - 1;          // 9 (Q1 は番号に含めない)
-    const percent = Math.min(100, Math.round((shown / total) * 100));
-
-    document.getElementById('current-q-num').textContent = shown;
-    const totalEl = document.getElementById('total-q-num');
-    if (totalEl) totalEl.textContent = total;
-    document.getElementById('progress-percent').textContent = percent + '%';
-    document.getElementById('progress-fill').style.width = percent + '%';
-
-    qNoEl.textContent = '設問 No.' + String(shown).padStart(3, '0');
-    qTitleEl.textContent = '[ ' + q.title + ' ]';
+    qTextEl.style.display = 'none';
+    document.getElementById('q-options').innerHTML = '';
+    if (q1AdEl) q1AdEl.style.display = 'block';
+    renderQ1Ad();
+    return;
   }
 
-  document.getElementById('q-text').textContent = q.question || q.text || '';
+  // Q2 以降は通常の問題表示。表示番号は Q2 を No.001 とする (案 i)
+  if (progressEl) progressEl.style.display = '';
+  qNoEl.style.display = '';
+  qTitleEl.style.display = '';
+  qTextEl.style.display = '';
+  if (q1AdEl) q1AdEl.style.display = 'none';
+
+  const shown = currentQuestionIndex;          // Q2(index1)→1 ... Q10(index9)→9
+  const total = questions.length - 1;          // 9 (Q1 は番号に含めない)
+  const percent = Math.min(100, Math.round((shown / total) * 100));
+
+  document.getElementById('current-q-num').textContent = shown;
+  const totalEl = document.getElementById('total-q-num');
+  if (totalEl) totalEl.textContent = total;
+  document.getElementById('progress-percent').textContent = percent + '%';
+  document.getElementById('progress-fill').style.width = percent + '%';
+
+  qNoEl.textContent = '設問 No.' + String(shown).padStart(3, '0');
+  qTitleEl.textContent = '[ ' + q.title + ' ]';
+
+  qTextEl.textContent = q.question || q.text || '';
 
   const c = document.getElementById('q-options');
   c.innerHTML = '';
@@ -2358,6 +2399,71 @@ function renderQuestion() {
     default:
       renderTextOptions(c, q.options);
   }
+}
+
+function renderQ1Ad() {
+  const adTexts = ['ドパガキ防止法', 'あなたを救う', '今すぐダウンロード', '脳のドーパミン依存を阻止'];
+  const textEl = document.getElementById('q1-ad-text');
+  const skipBtn = document.getElementById('q1-ad-skip-btn');
+  const countEl = document.getElementById('q1-ad-count');
+  const continueBtn = document.getElementById('q1-ad-continue-btn');
+
+  // 初期状態リセット (再入対策)
+  let textIdx = 0;
+  textEl.textContent = adTexts[0];
+  skipBtn.disabled = true;
+  skipBtn.classList.remove('active');
+  skipBtn.innerHTML = '広告は <span id="q1-ad-count">5</span> 秒後にスキップ可能';
+  continueBtn.style.display = 'none';
+
+  let answered = false;
+
+  // 広告文字を 1 秒ごとに切り替え
+  const textInterval = setInterval(() => {
+    textIdx = (textIdx + 1) % adTexts.length;
+    textEl.textContent = adTexts[textIdx];
+    // アニメーションを再トリガー
+    textEl.style.animation = 'none';
+    void textEl.offsetWidth;
+    textEl.style.animation = '';
+  }, 1000);
+
+  // 5 秒カウントダウン
+  let countdown = 5;
+  const countInterval = setInterval(() => {
+    countdown--;
+    if (countdown > 0) {
+      const cEl = document.getElementById('q1-ad-count');
+      if (cEl) cEl.textContent = countdown;
+    } else {
+      clearInterval(countInterval);
+      // スキップ可能化 + 視聴ボタン表示
+      skipBtn.disabled = false;
+      skipBtn.classList.add('active');
+      skipBtn.innerHTML = 'スキップ ▶';
+      continueBtn.style.display = '';
+    }
+  }, 1000);
+
+  function cleanup() {
+    clearInterval(textInterval);
+    clearInterval(countInterval);
+  }
+
+  skipBtn.onclick = () => {
+    if (answered || skipBtn.disabled) return;
+    answered = true;
+    cleanup();
+    answerQuestion({ score: 0, label: 'スキップする', criticalLv: 5 });
+  };
+  continueBtn.onclick = () => {
+    if (answered) return;
+    answered = true;
+    cleanup();
+    answerQuestion({ score: 0, label: '広告を視聴する' });
+  };
+
+  activeQuestionCleanup = cleanup;
 }
 
 function renderTextOptions(container, options) {
